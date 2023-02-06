@@ -1,0 +1,20 @@
+#format INI
+
+[RiodeJaneiro]
+198.18.1.10
+
+[LasVegas]
+198.18.3.100   #DC-EDGE1
+198.18.3.101   #DC-EDGE2
+
+[Melbourne]
+198.18.3.104   #BR1-EDGE1
+198.18.3.105   #BR1-EDGE2
+
+[Amsterdam]
+198.18.3.106   #BR2-EDGE1
+
+[CiscoLive:children]
+Amsterdam
+LasVegas
+Melbourne

@@ -1,0 +1,4 @@
+- name: C-Edge Verifications
+  hosts: CiscoLive
+  connection: network_cli
+  gather_facts: no

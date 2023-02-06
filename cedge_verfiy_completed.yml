@@ -1,0 +1,23 @@
+tasks:
+
+    - name: Gathering IOS Facts
+      ios_facts:
+        gather_subset: min
+
+    - name: run show sdwan control connections
+      ios_command:
+        commands: show sdwan control connections
+      register: sdwanctlcon
+
+    - name: display Control Connections
+      debug:
+        var: sdwanctlcon["stdout_lines"][0]
+
+    - name: run show sdwan bfd session
+      ios_command:
+        commands: show sdwan bfd session
+      register: bfdsessions
+
+    - name: display bfd session status
+      debug:
+        var: bfdsessions["stdout_lines"][0]

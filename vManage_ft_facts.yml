@@ -1,0 +1,10 @@
+---
+- name: Verify SDWAN Deployment
+  hosts: localhost
+
+  tasks:
+    - vmanage_feature_template_facts:
+        user: "admin"
+        host: "198.18.1.10"
+        password: "C1sco12345"
+        factory_default: no

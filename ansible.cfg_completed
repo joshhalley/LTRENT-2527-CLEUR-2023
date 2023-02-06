@@ -1,0 +1,10 @@
+[defaults]
+inventory: ./inventory
+host_key_checking=False
+library = python-viptella/ansible/modules
+module_utils = python-viptella/ansible/module_utils
+remote_tmp = /home/dcloud/Ansible-Lab/tmp
+
+[privilege_escalation]
+become=False
+become_method=sudo
