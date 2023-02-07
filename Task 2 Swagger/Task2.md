@@ -1,11 +1,18 @@
-# Task 2: Rest API with Swagger
+* [Task 2 REST API with Swagger](#task-2-rest-api-with-swagger)
+* [Step 1 Open API docs](#step-1-open-api-docs)
+* [Step 2 Get a List of Devices](#step-2-get-a-list-of-devices)
+* [Step 3 Real Time Monitoring](#step-3-real-time-monitoring)
+* [Step 4 Creat User Group](#step-4-create-user-group)
+
+
+# Task 2: REST API with Swagger
 Swagger-based documentation is provided through your vManage instance at 
 
 https://vmanage-ip/apidocs
 
 This documentation gives you the option of interacting with the API and to see how the schema of the API is organized, and can be very helpful in building up the right syntax to use within future scripts and automation. 
 
-## Step 1: Open the API docs
+## Step 1: Open  API docs
 * Login to the following URL to access the API Docs
     * https://198.18.1.10/apidocs
     * username “admin”* password “C1isco12345”
