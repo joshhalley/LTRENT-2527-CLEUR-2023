@@ -1,35 +1,73 @@
 # Table of Content
 
-* [Task 0 Setup the Ubuntu Environment](#)
- * [Setting up Python Automation Environment](#)
-* [Task 1: Rest API with CURL ](#)
- * [ Step 1: Log In](#)
- * [ Step 2: Get a list of Devices](#)
-* [Task 3: Rest API with Postman](#)
- * [ Step 1: Postman Configuration](#)
- * [ Step 2: Authentication](#)
- * [ Step 3: API Cross-Site Request Forgery Prevention](#)
- * [ Step 4: GET SD-WAN Fabric Devices](#)
- * [ Step 5: GET SD-WAN Devices Status](#)
- * [ Step 6: GET SD-WAN Devices Counters](#)
- * [ Step 7: GET SD-WAN Interface Statistics](#)
- * [ Step 8: Add User Group](#)
- * [ Step 9: Add User](#)
- * [ Step 10: Generate code with Postman](#)
-* [Task 4: Rest API with Python](#)
- * [ Step 1: Authenticate](#)
- * [ Step 2: GET with Python](#)
-  * [  GET Edge List](#)
-  * [  GET Device and Template List ](#)
-  * [  Get Template Variable List](#)
- * [ Step 3: POST with Python](#)
-  * [  Change device hostname ](#)
-  * [Add vMange Usergroup ](#)
- * [ Step 4: SDWAN Policies with Python](#)
-  * [  Get  Policy List](#)
-  * [  Activate Policy](#)
-  * [  Deactivate Policy](#)
- * ## Optional Task
+* [Task 0 Setup the Ubuntu Environment](#task-0-setup-the-ubuntu-environment)
+ * [Setting up Python Automation Environment](#setting-up-python-automation-environment)
+* [Task 1: Rest API with CURL ](#task-1-rest-api-with-curl)
+ * [ Step 1: Log In](#step-1-log-in)
+ * [ Step 2: Get a list of Devices](#step-2-get-a-list-of-devices)
+* [Task 3: Rest API with Postman](#task-3-rest-api-with-postman)
+ * [ Step 1: Postman Configuration](#step-1-postman-configuration)
+ * [ Step 2: Authentication](#step-2-authentication)
+ * [ Step 3: API Cross-Site Request Forgery Prevention](#step-3-api-cross-site-request-forgery-prevention)
+ * [ Step 4: GET SD-WAN Fabric Devices](#step-4-get-sd-wan-fabric-devices)
+ * [ Step 5: GET SD-WAN Devices Status](#step-5-get-sd-wan-devices-status)
+ * [ Step 6: GET SD-WAN Devices Counters](#step-6-get-sd-wan-devices-counters)
+ * [ Step 7: GET SD-WAN Interface Statistics](#step-7-get-sd-wan-interface-statistics)
+ * [ Step 8: Add User Group](#step-8-add-user-group)
+ * [ Step 9: Add User](#step-9-add-user)
+ * [ Step 10: Generate code with Postman](#step-10-generate-code-with-postman)
+* [Task 4: Rest API with Python](#task-4-rest-api-with-python)
+ * [ Step 1: Authenticate](#step-1-authenticate)
+ * [ Step 2: GET with Python](#step-2-get-with-python)
+  * [  GET Edge List](#get-edge-list)
+  * [  GET Device and Template List ](#get-device-and-template-list)
+  * [  Get Template Variable List](#get-template-variable-list)
+ * [ Step 3: POST with Python](#step-3-post-with-python)
+  * [  Change device hostname ](#change-device-hostname)
+  * [Add vMange Usergroup ](#add-vmange-usergroup)
+ * [Step 4: SDWAN Policies with Python](#step-4-sdwan-policies-with-python)
+  * [Get Policy List](#get-policy-list)
+  * [Activate Policy](#activate-policy)
+  * [Deactivate Policy](#deactivate-policy)
+ * [Optional Task](#optional-task)
+
+
+## Learning Objectives 
+Upon completion of this lab, you will be able to: 
+
+1.	Clearly describe the merits of using CURL, Postman, Python and Ansible for API based interactions. 
+2.	Gained a starting point for the use of API based interactions with SDWAN in your lab and/or production network. 
+3.	Understand which tool should be applied in which context. 
+
+Disclaimer
+This training document is to familiarize with the Cisco SDWAN REST APIs. Although the lab design and configuration examples could be used as a reference, it’s not a real design, thus not all recommended features are used, or enabled optimally. For the design related questions please contact your representative at Cisco to engage your account SE, a Cisco partner or Cisco Professional Services (CX) to support you further with your journey. 
+
+## Scenario 
+In this lab activity, you will learn about the REST APIs provided by vManage and various methods to interact with it using programmability-based techniques. 
+
+The lab environment consists of five virtual SDWAN C-Edge nodes, which are managed and orchestrated via virtual vManage, vSmart and vBond instances. 
+
+The Wide Area network depicted in the network diagram below, shows connectivity between DC and Branch sites connecting over different handoffs, the blue links representing the MPLS and internet networks.
+
+To provide manageability of the network, an Ubuntu and Windows workstation provided. 
+
+The forthcoming programmability tasks outlined in this lab shall use a mix of operating systems to achieve the respective exercises. 
+
+## Network Diagram 
+
+![postman](images/nd.png)
+
+
+
+ 
+
+
+## Device Details 
+
+![postman](images/tb.png)
+
+```Dcloud VPN Credentials will be shared by the instructors  ```
+
 
 # Task 0: Setup the Ubuntu Environment 
 
@@ -294,6 +332,7 @@ At the top of the code snippet, the requests library is imported, after which va
 The response variable contains the response of the POST request and at the end, the text method of the response object is displayed to the user.
 You can do the same for all the other calls you explored in this Lab and obtain the Python code for them. You can then combine them in scripts and applications for automation and network programmability purposes
 
+``` Explore the other calls in the collection at your liesure``
 
 # Task 4: Rest API with Python
 
@@ -1900,3 +1939,593 @@ if __name__ == "__main__":
     cli()
    
 ```
+
+### Task 5: Using Ansible with SDWAN C-EDGEs  
+
+Ansible has become synonymous with automation in modern companies, providing a means to simplify complex tasks without the need for the network operator to be an expert in programming or scripting languages. 
+This section is going to explore the use of Ansible to achieve a number of actions within the SDWAN architecture. 
+* Use Ansible to connect directly to a c-edge and verify control plane state
+* Use Ansible to connect directly to a c-edge and verify the dataplane state
+* Use Ansible to execute API calls against vManage to push a template
+
+## Step 1: Verify the status of the Ansible Installation 
+
+To verify the installation state of Ansible, the execution of ansible –version is performed: 
+```
+ansible --version
+/home/dcloud/.local/lib/python3.8/site-packages/paramiko/transport.py:219: CryptographyDeprecationWarning: Blowfish has been deprecated
+  "class": algorithms.Blowfish,
+ansible [core 2.13.7]
+  config file = /etc/ansible/ansible.cfg
+  configured module search path = ['/home/dcloud/.ansible/plugins/modules', '/usr/share/ansible/plugins/modules']
+  ansible python module location = /home/dcloud/.local/lib/python3.8/site-packages/ansible
+  ansible collection location = /home/dcloud/.ansible/collections:/usr/share/ansible/collections
+  executable location = /home/dcloud/.local/bin/ansible
+  python version = 3.8.10 (default, Nov 14 2022, 12:59:47) [GCC 9.4.0]
+  jinja version = 3.1.2
+  libyaml = True
+```
+Interesting points to observe from the above output, is the location of the ansible.cfg file – this file is responsible for defining key charateristics for your Ansible automation activities, and the subsequent execution of ad-hoc tasks and playbooks.  
+It is also good to note the version of ansible which is running, and the version of python. Ansible modules are written in the python scripting language. 
+
+## Step 2: Create a new ansible.cfg file for your automation 
+Creating an ansible configuration file is the first step that a new operator should perform when getting started. 
+By default, there is a vast array of options and configuration knobs which are active in Ansible, way too many to cover in the course of this lab. That said, to get a sneak preview of what the defaults look like, you can execute the command: 
+ansible-config init --disabled > ansible.full_config
+This command will generate a complete configuration for Ansible, including all the default parameters. 
+To get an idea of what this default configuration looks like, you can execute the command: 
+cat ansible.full_config | head
+Which will print the first lines of the created default configuration: 
+```yml
+[defaults]
+# (boolean) By default Ansible will issue a warning when received from a task action (module or action plugin)
+# These warnings can be silenced by adjusting this setting to False.
+;action_warnings=True
+
+# (list) Accept list of cowsay templates that are 'safe' to use, set to empty list if you want to enable all installed templates.
+;cowsay_enabled_stencils=bud-frogs, bunny, cheese, daemon, default, dragon, elephant-in-snake, elephant, eyes, hellokitty, kitty, luke-koala, meow, milk, moofasa, moose, ren, sheep, small, stegosaurus, stimpy, supermilker, three-eyes, turkey, turtle, tux, udder, vader-koala, vader, www
+
+# (string) Specify a custom cowsay path or swap in your cowsay implementation of choice
+;cowpath=
+```
+Since there are way more parameters in the full default configuration file than will be needed for the purpose of this lab, the above information is only informational. 
+We will create a much more simplistic configuration for the purpose of our exercise. 
+
+### Configuration selection order:
+
+By default Ansible will attempt to use a configuration file in the following locations: 
+1.	Environment variable ANSIBLE_CONFIG
+if not set it will continue to attempt to find a file with the below precedence: 
+2.	./ansible.cfg 
+3.	~/.ansible.cfg
+4.	/etc/ansible/ansible.cfg
+
+Looking at our default –version output, we can see that we are presently pointing to the fourth option. 
+### Configuration file format:
+
+The format of the configuration file is key value pairs, with the section titles being enclosed in square brackets. 
+Lets start our lab execise by creating a directory, and in that directory creating the ansible.cfg file: 
+Directory creation: 
+```
+mkdir Ansible-Lab
+```
+Navigate to the directory: 
+```
+cd Ansible-Lab
+```
+Create your ansible.cfg file (using your favorite unix text editor): 
+```
+vim ansible.cfg
+```
+Inside the ansible.cfg file, we are going to add the following information:
+```yml
+[defaults]
+inventory: ./inventory
+host_key_checking=False
+
+[privilege_escalation]
+become=False
+become_method=sudo
+```
+The configuration added defines a number of actions: 
+[defaults]  is the expected and initial section for the configuration file, within this section we are defining the inventory location, which will provide the list for hosts which will be communicated with for the execution of ansible playbooks. 
+[privilege_escalation] is used for scenarios where system tasks may be executed on a remote unix host, often the use of su or sudo may be used for operations such as processes to be restarted or new packages to be installed. 
+
+For our purposes today, this is the extent of the configuration which we will adding into the ansible.cfg file.  Once the above content has been added, save the file and close it. 
+Once in the Ansible-Lab directory, you should now be able to see the change in prioritization for the ansible.cfg file, by once again executing the ansible –-version command. 
+Now upon executing that command the outputs should no longer point to the former location of /etc/ansible/ansible.cfg but rather to the new file which you created in the Ansible-Lab directory: 
+```
+ansible --version | grep cfg
+/home/dcloud/.local/lib/python3.8/site-packages/paramiko/transport.py:219: CryptographyDeprecationWarning: Blowfish has been deprecated
+  "class": algorithms.Blowfish,
+  config file = /home/dcloud/Ansible-Lab/ansible.cfg
+```
+## Step 3: Creating your Inventory 
+Since the Ansible configuration file has now been created, our first step towards building our first playbook has been concluded. 
+The next action which needs to happen is the definition of our inventory needs to take place. The inventory can be created through the use of YAML format or the more user friendly INI format. 
+For the purpose of this lab – we will use the INI format to initially create the configuration. 
+### INI File Format
+The INI format is very straight forward, and can be as simple as created a numbered list of systems or DNS names, ie: 
+```yml
+10.20.30.40
+40.50.60.70
+80.90.100.110
+www.cisco.com
+www.meraki.com
+www.thousandeyes.com
+```
+The above is the easiest possible form of deploying your inventory. 
+
+### Creating an INI Inventory File for the Lab
+As we want to better understand the power of Ansible, we are going to take a slightly more complex approach to the generation of the INI Inventory, which lets us perform more targeted automation execution. 
+Within the same directory that you placed your ansible.cfg file, please create a file called inventory using your favorite text editor. Within this file we are going to create location headings which match up with the Cisco Live Locations for 2023, closing the location definition within [ square brackets ].  
+Within those location headings we will populate the nodes which we will be working with through the course of this lab.
+
+``` yml
+#format INI
+
+[RiodeJaneiro]
+198.18.1.10
+
+[LasVegas]
+198.18.3.100   #DC-EDGE1
+198.18.3.101   #DC-EDGE2
+
+[Melbourne]
+198.18.3.104   #BR1-EDGE1
+198.18.3.105   #BR1-EDGE2
+
+[Amsterdam]
+198.18.3.106   #BR2-EDGE1
+
+[CiscoLive:children]
+Amsterdam
+LasVegas
+Melbourne
+```
+Once the file has been completed, close and save the file, checking that the file has been properly created by using the below command: 
+```
+cat /home/dcloud/Ansible-Lab/inventory
+```
+To further confirm that Ansible recognizes the inventory is present, you can use the command: 
+```
+ansible-inventory --list -y
+```
+The result of this command should show you the list which you just created in INI format. Now one thing which you may be thinking is that the formatting is different. 
+The reason for the change in formatting is that the -y flag prints the inventory our in YAML format for you. This can be helpful for you when trying to become more familiar with the syntax usage with YAML. 
+One further action that can be performed to confirm if ansible is reading the inventory correctly, is the ability to search for a specific host, this is particularly useful in large environments, where ansible may be managing 1000s of systems. 
+To search for a specific node in the inventory the below syntax can be used: 
+```
+ ansible 198.18.3.106 --list-hosts
+  hosts (1):
+    198.18.3.106
+```
+
+The resulting output confirms if there is an inventory file match for the selected host or not. 
+
+## Step 4: Node Variables
+
+When automating systems in Ansible it is not uncommon to have different usernames, passwords, or even network protocol ports that should be used when trying to connect. 
+In this exercise we are going to explore the different methods that variables can be allocated to systems. 
+### Inline within Inventory File
+In the previous section the method which was used or variable assignment allows for the operator to control a broad range of variables that may be specific to a specific host. 
+Directly next to the host the variables which are desired for that host should be populated in. 
+As we just observed, we only have three variables which we intend to deploy, which isn’t a significant amount. Therefore we are going to look at other options to allocate these parameters fo your systems, one of which is inline variable allocation within your inventory file itself. 
+For this part of the configuration we are going to be focusing on DC-EDGE2 (198.18.3.101). 
+Using your favorite editor, open up the inventory file again. This time editing the line where DC-EDGE2 is located, before the # symbol
+IMPORTANT!! Please note, that although the example below shows multiple lines being used, this is wordwrapped, do not press carriage return when entering variables, all content must remain on the one line. 
+
+```yml
+<OTHER LINES REDACTED FOR BREVITY>
+[LasVegas]
+198.18.3.100   #DC-EDGE1
+198.18.3.101 ansible_user=admin ansible_ssh_pass=admin ansible_network_os=ios   #DC-EDGE2
+<OTHER LINES REDACTED FOR BREVITY>
+```
+
+### Group Based Variables in Inventory
+The former two methods which were showcased were very host, making use of the inline configuration in the inventory and the host_vars configurations. If however you have common parameters which should be used for numerous hosts at once, you can vastly simplify the applied variables by allocating them directly to a group in the inventory. 
+Using your editor, open up the inventory file again, and add the following content to the bottom of the file: 
+```yml
+[Melbourne:vars]
+ansible_user=admin
+ansible_ssh_pass=admin
+ansible_network_os=ios
+```
+These variables will now be used for access to systems which are located under the Melbourne portion of the hierarchy upon execution, assuming that there is no more specific variable to override them. 
+
+## Step 5: Executing an Ad-Hoc Task 
+Sometimes in Ansible you want to do some basic verifications without the need to execute a complete playbook. To achieve this we execute what is referred to as an ad-hoc tasks. 
+Using the syntax below, walk through your inventory sections and attempt execution of a single CLI command:
+``` 
+ansible LasVegas --limit 198.18.3.100 -m raw -a 'show ver | i Cisco IOS Software'
+```
+In the above example, we are choosing to select hosts from the inventory file under the section [LasVegas] whilst limiting the selection of hosts to a single device “198.18.3.100”. 
+The execution is leveraging one of the bulit-in modules from ansible called ‘raw’, this module provides limited feedback and error checking, hence usually more useful for interaction with embedded systems. 
+```
+198.18.3.100 | CHANGED | rc=0 >>
+Restricted Use
+Cisco IOS Software [Cupertino], Virtual XE Software (X86_64_LINUX_IOSD-UNIVERSALK9-M), Version 17.9.2a, RELEASE SOFTWARE (fc4)
+Un authorised Logins trackedShared connection to 198.18.3.100 closed.
+```
+## Step 6: Deploying your first playbook  
+Make sure that you are in your Ansible-Lab root directory (the directory which has your ansible.cfg file): 
+```
+cd /home/dcloud/Ansible-Lab/
+```
+### Create Directory Structure For Playbooks
+From this location, go ahead and create a new directory called tasks 
+After creating the new directory, navigate into that portion of the hierarchy and create a new file called cedge_verify.yml :
+```
+cd /home/dcloud/Ansible-Lab/tasks/
+touch cedge_verify.yml
+```
+### Creating your first Playbook 
+The tasks directory which you just created is where we are going to place your playbooks which are written in the YAML format. 
+Using an editor open up the cedge_verify.yml file which you created in the tasks directory and add the below content into the file. 
+YAML format has a strict requirement in terms of hierarchy and spacing, so please be mindful of the indentations when adding the content: 
+```yml
+- name: C-Edge Verifications
+  hosts: CiscoLive
+  connection: network_cli
+  gather_facts: no
+```
+After configuring the playbook file, go back to your Ansible-Lab directory and execute the below command: 
+```
+ansible-playbook tasks/cedge_verify.yml
+```
+Upon execution you should see the following output: 
+```
+PLAY [C-Edge Verifications] ********************************************************************
+
+PLAY RECAP *********************************************************************
+```
+Congratulations!!! 
+You successfully executed an Ansible Playbook, now… this is a great first step, but actually you didn’t really do anything, aside from verify that the syntax was valid. 
+Now, time to start doing more elaborate steps by adding your first play. 
+
+### Adding your first Plays
+Open up the existing cedge_verify.yml file and under the existing content, add a new section called tasks:  this is where we configure our different routines which are referred to as plays. 
+Looking below you can see that individual plays are listed: 
+tasks:
+```yml
+    - name: Gathering IOS Facts
+      ios_facts:
+        gather_subset: min
+
+    - name: run show sdwan control connections
+      ios_command:
+        commands: show sdwan control connections
+      register: sdwanctlcon
+
+    - name: display Control Connections
+      debug:
+        var: sdwanctlcon["stdout_lines"][0]
+
+    - name: run show sdwan bfd session
+      ios_command:
+        commands: show sdwan bfd session
+      register: bfdsessions
+
+    - name: display bfd session status
+      debug:
+        var: bfdsessions["stdout_lines"][0]
+```
+After saving the above configurations, it is time to go ahead and execute your playbook again. 
+This time, with the added tasks present, you should observe a more extensive output, sharing the results of the commands which were executed on each system. 
+ 
+![postman](images/an.png)
+
+Looking above – we can see a mix of failed and successful sessions. 
+For the sessions which have failed, the credentials and the network operating system was missing. 
+Please go ahead and edit the inventory file to actualize these parameters and run the playbook again. 
+With that task complete, we have concluded the section of using Ansible for IOS-XE CLI interaction. Feel free to adjust the plays present to match up with further commands which may be relevant to your operational landscape and test them out. 
+
+
+# Task 6: Using Ansible with SDWAN vManage  
+
+Ansible has become synonymous with automation in modern companies, providing a means to simplify complex tasks without the need for the network operator to be an expert in programming or scripting languages. 
+This section is going to explore the use of Ansible to achieve a number of actions within the SDWAN architecture. 
+-	Use Ansible to execute API calls against vManage to push a template
+
+In this section we are going to shift gears a little bit, and move away from the earlier SDWAN C-Edge executions which Ansible was performing using the SSH protocol. 
+Instead, we are going to be looking at having Ansible directly interface with the API’s which exist within vManage to perform command and control tasks on the system. 
+
+## Step 1: Download Custom Ansible SDWAN Modules 
+
+Many modules which exist within Ansible can be downloaded directly via ansible-galaxy which acts as a package manager for hosted modules. Other modules, which…… 
+
+In this section we are going to be using the programming logic and frameworks which exist in the below CiscoDevNet page: 
+https://github.com/CiscoDevNet/python-viptela
+To retrive this project, in your Ansible-Lab directory execute the following command: 
+
+```
+git clone 
+https://github.com/CiscoDevNet/python-viptela
+Executing the above command will download the code repository and create a new directory with its contents.
+Cloning into 'python-viptela'...
+remote: Enumerating objects: 2093, done.
+remote: Counting objects: 100% (450/450), done.
+remote: Compressing objects: 100% (203/203), done.
+remote: Total 2093 (delta 294), reused 367 (delta 235), pack-reused 1643
+Receiving objects: 100% (2093/2093), 549.23 KiB | 2.03 MiB/s, done.
+Resolving deltas: 100% (1345/1345), done.
+dcloud@ubuntu:~/Ansible-Lab$
+Cloned repository which was downloaded: 
+```
+```
+ls -tlr
+total 16
+-rw-rw-r-- 1 dcloud dcloud  114 Jan 29 18:13 ansible.cfg
+drwxrwxr-x 2 dcloud dcloud 4096 Jan 30 10:54 tasks
+-rw-rw-r-- 1 dcloud dcloud  525 Jan 30 11:07 inventory
+drwxrwxr-x 9 dcloud dcloud 4096 Jan 30 11:38 python-viptela
+```
+
+### Instructing Ansible to use custom Modules 
+To allow for the new modules which are part of the cloned repository to be used, some further lines need to be added into the existing ansible.cfg file which is located in the Ansible-Lab directory (the new additions being highlighted in Yellow): 
+
+```yml
+[defaults]
+inventory: ./inventory
+host_key_checking=False
+library = python-viptella/ansible/modules
+module_utils = python-viptella/ansible/module_utils
+remote_tmp = /home/dcloud/Ansible-Lab/tmp
+
+[privilege_escalation]
+become=False
+become_method=sudo
+```
+
+Once adding the content, save the file again, and we can move onto the next step of preparing the inventory for vManage. 
+
+## Step 2: Prepare a the inventory for vManage
+The existing inventory which is configured at the moment has been focusing on our C-Edge locations which are using locations from Cisco Live 2023 venues. 
+In addition to these locations, we also have the location [RiodeJaneiro] which is pointing to a different host. This specific host is your vManage instance. 
+To allow for this host to be communicated with, we will need to populate the inventory file with some new credentials and information. 
+### vManage Variables
+Opening up the inventory file, please proceed in adding a new section called [RiodeJaneiro:vars] . 
+The end output should look like what we have below with the new additions highlighted in Yellow: 
+```
+cat inventory
+```
+```yml
+#format INI
+
+[RiodeJaneiro]
+198.18.1.10
+<SNIP – REDACTED FOR BREVITY>
+[RiodeJaneiro:vars]
+ansible_user = admin
+ansible_password = C1sco12345
+vmanage_ip = 198.18.1.10
+```
+
+## Step 3: Create a Playbook for vManage
+
+Now that the inventory has been updated with the requisite credentials, and the ansible.cfg file is pointing to the modules which we need for interacting with vManage. We can begin creation of the playbook. 
+Once again, in the tasks directory, create a file this time called vManage_ft_facts.yml populating the file with the following content: 
+```yml
+---
+- name: Verify SDWAN Deployment
+  hosts: localhost
+
+  tasks:
+    - vmanage_feature_template_facts:
+        user: "admin"
+        host: "198.18.1.10"
+        password: "C1sco12345"
+        factory_default: no
+```
+
+An interesting observation to note is that the hosts: which are listed in the YAML file, instead of the entry pointing directly to an external system, it is actually pointing to the local system itself. The reason for this is that the Ubuntu server is responsible for executing API calls directly to vManage. 
+
+### Executing the playbook
+After being configured, navigate back to the Ansible-Lab directory and execute the playbook using the below syntax: 
+```
+ansible-playbook tasks/vManage_ft_facts.yml
+```
+When launched you can see that Ansible shows that the playbook was executed with the status ‘ok’ however no output was visible: 
+```
+ansible-playbook tasks/vManage_ft_facts.yml
+PLAY [Verify SDWAN Deployment] ****************************************************************************
+TASK [Gathering Facts] ****************************************************************************
+ok: [localhost]
+TASK [vmanage_feature_template_facts] ****************************************************************************
+[WARNING]: Module did not set no_log for password
+ok: [localhost]
+PLAY RECAP ****************************************************************************
+localhost: ok=2 changed=0 unreachable=0 failed=0 skipped=0 rescued=0 ignored=0
+```
+Unlike the other examples there was no configuration in the playbook indicating that the outputs should be written to standard out (stdout). 
+One method that can be used to view what return data is being written, is the activation of the verbose flags when executing the playbook, as seen in the example below: 
+
+```
+ansible-playbook   -vv tasks/vManage_ft_facts.yml
+<SNIP>
+PLAYBOOK: vManage_ft_facts.yml **********************************************************************************************************************************************
+1 plays in tasks/vManage_ft_facts.yml
+
+PLAY [Verify SDWAN Deployment] **********************************************************************************************************************************************
+
+TASK [Gathering Facts] ******************************************************************************************************************************************************
+task path: /home/dcloud/Ansible-Lab/tasks/vManage_ft_facts.yml:2
+ok: [localhost]
+META: ran handlers
+
+TASK [vmanage_feature_template_facts] ***************************************************************************************************************************************
+task path: /home/dcloud/Ansible-Lab/tasks/vManage_ft_facts.yml:6
+[WARNING]: Module did not set no_log for password
+ok: [localhost] => {"changed": false, "feature_templates": [{"attachedMastersCount": 1, "configType": "xml", "createdBy": "admin", "createdOn": 1669643778965, "deviceType": ["vedge-C8000V"], "devicesAttached": 2, "factoryDefault": false, "lastUpdatedBy": "admin", "lastUpdatedOn": 1669653516653, "resourceGroup": "global", "templateDefinition": {
+```
+
+# Task 7: SDWAN Monitoring with webhooks 
+
+The Cisco SD-WAN platform provides webhooks that allow third-party applications to receive network data, when specified events occur.
+* Webhooks enable push-model mechanism to send notifications in real-time.
+* To retrieve alarms in real-time from vManage using the REST APIs, you need to poll for the data frequently. By using webhooks, vManage can send HTTP POST request to the external system in real-time once an alarm is received.
+* Webhooks are sometimes referred to as “Reverse APIs” and you must design an API to consume or process the data that are sent via webhook.
+## Step 1: Confiugre vManage 
+To enable webhook notifications for pushing alarms to external systems
+* Goto Monitor > Logs Click on Alarm Notifications
+
+ ![postman](images/wh1.png)
+
+
+* Click Add Alarm Notification
+* Enter a Name – “webhook_test”
+* Select Severity – Critical & Major
+* Select Alarm Name – Control vBond State Change
+* Check Webhook Check box
+* Enter the webhook server URL, username, and password for webhook
+    * If webhook server does not have authentication configured, please provide simple username and password, that are test and test, respectively.
+* Webhook URL should be set to http://198.18.133.100:5001/
+* Webhook Threshold – 10 
+* Select All Devices option and click Add to complete the webhook settings
+
+![postman](images/wh2.png)
+
+* Enable Alarm notifications in Administration settings of vManage.
+
+![postman](images/wh3.png)
+
+## Step 2: Enable Webhook Server
+
+Set up webhook server to accept notifications sent from vManage.
+* To accept HTTP post requests sent from vManage, you need to enable HTTP web server and design API route.
+* The “webhook.py” script shown below spins up flask web server listening on port 5001 for HTTP POST request.
+* Defined webhook() function accepts the POST request at route http://198.18.133.100:5001/ and extracts the data from request and prints with Indent.
+```
+cat webhook.py 
+```
+```python
+from flask import Flask, request, jsonify
+import json
+import os
+import time
+import datetime
+import pytz
+
+app = Flask(__name__)
+
+@app.route('/',methods=['POST'])
+def webhook():
+    if request.method == 'POST':
+       print("Data received from Webhook is: ", (json.dumps(request.json, indent=4)))
+       return "Webhook received!"
+
+app.run(host='0.0.0.0', port=5001)
+```
+## Step 3: Start Webhook Server
+On ubuntu command prompt, run the command python webhook.py to spin up HTTP webhook server.
+```json
+python3 webhook.py 
+ * Serving Flask app 'webhook'
+ * Debug mode: off
+WARNING: This is a development server. Do not use it in a production deployment. Use a production WSGI server instead.
+ * Running on all addresses (0.0.0.0)
+ * Running on http://127.0.0.1:5001
+ * Running on http://198.18.133.100:5001
+Press CTRL+C to quit
+```
+
+* Trigger alarm by clearing control connections on vManage
+* SSH to vManage and give the command “clear control connections”
+
+```json
+python3 webhook.py 
+ * Serving Flask app 'webhook-1'
+ * Debug mode: off
+WARNING: This is a development server. Do not use it in a production deployment. Use a production WSGI server instead.
+ * Running on all addresses (0.0.0.0)
+ * Running on http://127.0.0.1:5001
+ * Running on http://198.18.133.100:5001
+Press CTRL+C to quit
+
+
+
+Data received from Webhook is:  {
+    "suppressed": false,
+    "devices": [
+        {
+            "system-ip": "10.10.10.10"
+        }
+    ],
+    "eventname": "control-vbond-state-change",
+    "type": "control-vbond-state-change",
+    "rulename": "control-vbond-state-change",
+    "component": "Control",
+    "entry_time": 1674845032974,
+    "statcycletime": 1674845032885,
+    "message": "vBond state changed",
+    "severity": "Critical",
+    "severity_number": 1,
+    "uuid": "a25bf9d1-8628-465e-943f-c5761f948447",
+    "values": [
+        {
+            "system-ip": "10.10.10.10",
+            "new-state": "down",
+            "host-name": "vManage"
+        }
+    ],
+    "rule_name_display": "Control_vBond_State_Change",
+    "receive_time": 1674845032912,
+    "values_short_display": [
+        {
+            "host-name": "vManage",
+            "system-ip": "10.10.10.10",
+            "new-state": "down"
+        }
+    ],
+    "system_ip": "10.10.10.10",
+    "acknowledged": false,
+    "active": true
+}
+198.18.1.10 - - [27/Jan/2023 18:44:06] "POST / HTTP/1.1" 200 -
+Data received from Webhook is:  {
+    "suppressed": false,
+    "devices": [
+        {
+            "system-ip": "10.10.10.10"
+        }
+    ],
+    "eventname": "control-vbond-state-change",
+    "type": "control-vbond-state-change",
+    "rulename": "control-vbond-state-change",
+    "component": "Control",
+    "entry_time": 1674845033633,
+    "statcycletime": 1674845033432,
+    "message": "vBond state changed",
+    "severity": "Major",
+    "severity_number": 2,
+    "uuid": "0c76be0a-a9f7-45ea-90ed-12327f9e40e4",
+    "values": [
+        {
+            "system-ip": "10.10.10.10",
+            "new-state": "up",
+            "host-name": "vManage"
+        }
+    ],
+    "rule_name_display": "Control_vBond_State_Change",
+    "receive_time": 1674845033436,
+    "values_short_display": [
+        {
+            "host-name": "vManage",
+            "system-ip": "10.10.10.10",
+            "new-state": "up"
+        }
+    ],
+    "system_ip": "10.10.10.10",
+    "acknowledged": false,
+    "cleared_events": [
+        "f6e68c6b-5a58-4be5-9ba1-1319469bb3c4",
+        "a25bf9d1-8628-465e-943f-c5761f948447"
+    ],
+    "active": false
+}
+198.18.1.10 - - [27/Jan/2023 18:44:06] "POST / HTTP/1.1" 200 -
+```
+The data received corresponds to the alarms that were received by vManage
+
+![postman](images/wh4.png)
