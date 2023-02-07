@@ -1,0 +1,386 @@
+{
+	"info": {
+		"_postman_id": "e22060a0-668e-4476-a4f5-45b141052b54",
+		"name": "Cisco-SD-WAN",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "1.Authentication",
+			"item": [
+				{
+					"name": "Authentication",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/x-www-form-urlencoded"
+							}
+						],
+						"body": {
+							"mode": "urlencoded",
+							"urlencoded": [
+								{
+									"key": "j_username",
+									"value": "{{j_username}}",
+									"type": "text"
+								},
+								{
+									"key": "j_password",
+									"value": "{{j_password}}",
+									"type": "text"
+								}
+							]
+						},
+						"url": {
+							"raw": "https://{{vmanage}}:{{port}}/j_security_check",
+							"protocol": "https",
+							"host": [
+								"{{vmanage}}"
+							],
+							"port": "{{port}}",
+							"path": [
+								"j_security_check"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Token",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"var XSRFToken = pm.response.text()",
+									"pm.environment.set(\"X-XSRF-TOKEN\", XSRFToken);",
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "https://{{vmanage}}:{{port}}/dataservice/client/token",
+							"protocol": "https",
+							"host": [
+								"{{vmanage}}"
+							],
+							"port": "{{port}}",
+							"path": [
+								"dataservice",
+								"client",
+								"token"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "2. SD-WAN Fabric Devices",
+			"item": [
+				{
+					"name": "Fabric Devices",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "X-XSRF-TOKEN",
+								"value": "{{X-XSRF-TOKEN}}",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "https://{{vmanage}}:{{port}}/dataservice/device",
+							"protocol": "https",
+							"host": [
+								"{{vmanage}}"
+							],
+							"port": "{{port}}",
+							"path": [
+								"dataservice",
+								"device"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Devices Status",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "https://{{vmanage}}:{{port}}/dataservice/device/monitor",
+							"protocol": "https",
+							"host": [
+								"{{vmanage}}"
+							],
+							"port": "{{port}}",
+							"path": [
+								"dataservice",
+								"device",
+								"monitor"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Device Counters",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "X-XSRF-TOKEN",
+								"value": "{{X-XSRF-TOKEN}}",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "https://{{vmanage}}:{{port}}/dataservice/device/counters",
+							"protocol": "https",
+							"host": [
+								"{{vmanage}}"
+							],
+							"port": "{{port}}",
+							"path": [
+								"dataservice",
+								"device",
+								"counters"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Interface statistics",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "X-XSRF-TOKEN",
+								"value": "{{X-XSRF-TOKEN}}",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "https://{{vmanage}}:{{port}}/dataservice/statistics/interface",
+							"protocol": "https",
+							"host": [
+								"{{vmanage}}"
+							],
+							"port": "{{port}}",
+							"path": [
+								"dataservice",
+								"statistics",
+								"interface"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "3. SD-WAN Device Template",
+			"item": [
+				{
+					"name": "Template Feature",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "X-XSRF-TOKEN",
+								"value": "{{X-XSRF-TOKEN}}",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "https://{{vmanage}}:{{port}}/dataservice/template/feature",
+							"protocol": "https",
+							"host": [
+								"{{vmanage}}"
+							],
+							"port": "{{port}}",
+							"path": [
+								"dataservice",
+								"template",
+								"feature"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Template Feature Type",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "X-XSRF-TOKEN",
+								"value": "{{X-XSRF-TOKEN}}",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "https://{{vmanage}}:{{port}}/dataservice/template/feature/types",
+							"protocol": "https",
+							"host": [
+								"{{vmanage}}"
+							],
+							"port": "{{port}}",
+							"path": [
+								"dataservice",
+								"template",
+								"feature",
+								"types"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "4. SD-WAN Device Policy",
+			"item": [
+				{
+					"name": "vEdge Template Policy",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "https://{{vmanage}}:{{port}}/dataservice/template/policy/vedge/devices",
+							"protocol": "https",
+							"host": [
+								"{{vmanage}}"
+							],
+							"port": "{{port}}",
+							"path": [
+								"dataservice",
+								"template",
+								"policy",
+								"vedge",
+								"devices"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Policy List",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "X-XSRF-TOKEN",
+								"value": "{{X-XSRF-TOKEN}}",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "https://{{vmanage}}:{{port}}/dataservice/template/policy/list",
+							"protocol": "https",
+							"host": [
+								"{{vmanage}}"
+							],
+							"port": "{{port}}",
+							"path": [
+								"dataservice",
+								"template",
+								"policy",
+								"list"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Admin Tasks",
+			"item": [
+				{
+					"name": "Add User Group",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "X-XSRF-TOKEN",
+								"value": "{{X-XSRF-TOKEN}}",
+								"type": "default"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n  \"groupName\": \"demogrp\",\r\n  \"tasks\": [\r\n    {\r\n      \"feature\": \"Manage Users\",\r\n      \"read\": true,\r\n      \"enabled\": true,\r\n      \"write\": true\r\n    }\r\n  ]\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "https://{{vmanage}}:{{port}}/dataservice/admin/usergroup",
+							"protocol": "https",
+							"host": [
+								"{{vmanage}}"
+							],
+							"port": "{{port}}",
+							"path": [
+								"dataservice",
+								"admin",
+								"usergroup"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Add User",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "X-XSRF-TOKEN",
+								"value": "{{X-XSRF-TOKEN}}",
+								"type": "default"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n   \"group\":[\r\n      \"demogrp\"\r\n   ],\r\n   \"description\":\"Demo User\",\r\n   \"userName\":\"demouser\",\r\n   \"password\":\"password\",\r\n   \"locale\":\"en_US\",\r\n   \"resGroupName\":\"global\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "https://{{vmanage}}:{{port}}/dataservice/admin/user",
+							"protocol": "https",
+							"host": [
+								"{{vmanage}}"
+							],
+							"port": "{{port}}",
+							"path": [
+								"dataservice",
+								"admin",
+								"user"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		}
+	]
+}
