@@ -2,8 +2,13 @@
 
 * [Task 0 Setup the Ubuntu Environment](#task-0-setup-the-ubuntu-environment)
     * [Setting up Python Automation Environment](#setting-up-python-automation-environment)
-* 
-
+* [Task 1 REST API with CURL](/Task%201%20Curl/Task1.md)
+* [Task 2 REST API with Swagger](/Task%202%20Swagger/Task2.md)
+* [Task 3 REST API with POSTMAN](/Task%203%20Postman/Task3.md)
+* [Task 4 REST API with Python](/Task%204%20Python/Task4.md)
+* [Task 5 Using Ansible with SDWAN C-EDGEs](/Task%205%20Ansible/Task5.md)
+* [Task 6 Using Ansible with SDWAN vManage](/Task%206%20Ansible%20SDWAN/Task6.md)
+* [Task 7 SDWAN Monitoring with Webhook](/Task%207%20Monitoring/Task7.md)
 
 
 ## Learning Objectives 
