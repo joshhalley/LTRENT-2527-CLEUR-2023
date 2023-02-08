@@ -1,35 +1,38 @@
-[Task 4: Rest API with Python](#task-4-rest-api-with-python)
-* [ Step 1: Authenticate](#step-1-authenticate)
-* [ Step 2: GET with Python](#step-2-get-with-python)
-    * [GET Controller List](#get-controller-list)
-    * [GET Edge List](#get-edge-list)
-    * [GET Device, Template and Variable List](#get-device-template-and-variable-list)
-* [ Step 3: POST with Python](#step-3-post-with-python)
-    * [Change device hostname ](#change-device-hostname)
-    * [Add vMange Usergroup ](#add-vmange-usergroup)
-    * [Add vMange User ](#add-vmanage-user)
+# Table of Content
+
+* [Task 4: Rest API with Python](#task-4-rest-api-with-python)
+* [Step 1: Authenticate](#step-1-authenticate)
+* [Step 2: GET with Python](#step-2-get-with-python)
+* [GET Controller List](#get-controller-list)
+* [GET Edge List](#get-edge-list)
+* [GET Device, Template and Variable List](#get-device-template-and-variable-list)
+* [Step 3: POST with Python](#step-3-post-with-python)
+* [Change device hostname](#change-device-hostname)
+* [Add vMange Usergroup](#add-vmange-usergroup)
+* [Add vMange User](#add-vmanage-user)
 * [Step 4: SDWAN Policies with Python](#step-4-sdwan-policies-with-python)
-    * [Get Policy List](#get-policy-list)
-    * [Activate Policy](#activate-policy)
-    * [Deactivate Policy](#deactivate-policy)
+* [Get Policy List](#get-policy-list)
+* [Activate Policy](#activate-policy)
+* [Deactivate Policy](#deactivate-policy)
 * [Optional Task](#optional-task)
 
-# Task 4: Rest API with Python
+## Task 4: Rest API with Python
 
 Postman is great to start interacting with and discovering APIs, but to automate and program the infrastructure, you need to build code that can be reused
 We will now explore the APIs using python.
 
 ## Step 1: Authenticate
 
-Below is the script for authentication, in which we have the following: 
-•	A class named Authenticaton
-•	Under the class we have defined 2 functions 
-o	get_jsessionid
-o	get_token
+Below is the script for authentication, in which we have the following:
+•A class named Authenticaton
+•Under the class we have defined 2 functions
+oget_jsessionid
+oget_token
 
-```
+```code
 cat vmanage_auth.py 
 ```
+
 ```python
 #! /usr/bin/env python
 import requests
@@ -108,17 +111,18 @@ if __name__ == '__main__':
 ###############################################################################################
 ```
 
-•	The final section in the authentication is using the Authentication class 
-•	This is used to log in to SD-WAN vManage and get the jsessionid and token.
-•	The get_jsessionid() is used to log in to SD-WAN vManage and get the jsessionid.
-•	The get_token() is used to get the token
-•	The variable jsessionid is used to set the cookie that is required for the API endpoint to be accessed.
-•	Here the token is the value of the token that is stored in the session.
-•	The token is stored in the session when the user logs in.
-•	The base url is composed of the vmanage_host and vmanage_port variables.
-•	The vmanage ip, port username and passwords are taken from the environment variables
-Add the environment variable, execute the above script, it will print the JSESSION ID and the XSRF token 
-```
+•The final section in the authentication is using the Authentication class
+•This is used to log in to SD-WAN vManage and get the jsessionid and token.
+•The get_jsessionid() is used to log in to SD-WAN vManage and get the jsessionid.
+•The get_token() is used to get the token
+•The variable jsessionid is used to set the cookie that is required for the API endpoint to be accessed.
+•Here the token is the value of the token that is stored in the session.
+•The token is stored in the session when the user logs in.
+•The base url is composed of the vmanage_host and vmanage_port variables.
+•The vmanage ip, port username and passwords are taken from the environment variables
+Add the environment variable, execute the above script, it will print the JSESSION ID and the XSRF token
+
+```code
 export vManage_IP=198.18.1.10
 export vManage_PORT=443
 export vManage_USERNAME=admin
@@ -129,16 +133,20 @@ JSESSIONID=I5Jw-qCdy5nqxcsKZCadZSda-QytelBbGqY6lQFu.f781faf4-cf63-4f7c-9f80-b631
 1AB84846F363D8849BCA647558FC89ACA8C4F835B3456BF8935B44DF08258C27EBB6EA8960E865B6EFCD851BD00DBDFAF449
 dcloud@ubuntu:~/lab/final_scripts$
 ```
+
 ## Step 2: GET with Python
+
 Now using the above authentication class, we can create scripts to run GET and POST operations
 
 ### GET Controller List
 
 Below script uses the authentication class and then at the end run a GET for controllers and extracts just the [data] portion of the JSON and store it in a variable called items
 It now iterates over each device in the items with a for loop and extract data for the devicetype and deviceIP. After this display the data as specified in the print statement
-```
+
+```code
 cat get_sdwan_controller_1.py 
 ```
+
 ```python
 #! /usr/bin/env python
 import requests
@@ -224,7 +232,8 @@ if __name__ == '__main__':
     for device in items:
         print(f"Device controller => {device['deviceType']} with IP address {device['deviceIP']}")
 ```
-```
+
+```code
 python3 get_sdwan_controller_1.py 
 https://198.18.1.10:443/dataservice/system/device/controllers
 Device controller => vmanage with IP address 10.10.10.10
@@ -233,8 +242,9 @@ Device controller => vsmart with IP address 22.22.22.22
 Device controller => vbond with IP address 11.11.11.11
 ```
 
-Modify the code as below if you want to see the full response 
-```
+Modify the code as below if you want to see the full response
+
+```code
     url = base_url + "/system/device/controllers"
     print(url)
     response = requests.get(url=url, headers=headers,verify=False)
@@ -245,7 +255,8 @@ Modify the code as below if you want to see the full response
 ```
 
 Modify the code as below if you want to see the full response in pretty format
-```
+
+```code
     url = base_url + "/system/device/controllers"
     print(url)
     response = requests.get(url=url, headers=headers,verify=False)
@@ -255,11 +266,12 @@ Modify the code as below if you want to see the full response in pretty format
         print(f"Device controller => {device['deviceType']} with IP address {device['deviceIP']}")
 ```
 
-
 ### GET Edge List
-```
+
+```code
 cat get_sdwan_edges_1.py
 ```
+
 ```python
 #! /usr/bin/env python
 import requests
@@ -344,10 +356,9 @@ if __name__ == '__main__':
 
     for vedge in vedges:
         print(f"vEdge device => {vedge['deviceModel']} with serialnumber {vedge['serialNumber']}")
-		
 ```
 
-```
+```code
 python3 get_sdwan_edges_1.py 
 https://198.18.1.10:443/dataservice/system/device/vedges
 vEdge device => vedge-C8000V with serialnumber 5BA2D66C
@@ -357,22 +368,24 @@ vEdge device => vedge-C8000V with serialnumber 445B38B7
 vEdge device => vedge-C8000V with serialnumber 5B0A9622
 ```
 
-
-### GET Device, Template and Variable List 
+### GET Device, Template and Variable List
 
 The below uses click to create the CLI component of the application
 Three CLI commands are grouped under the cli Group: device_list, template-list and variable-list, The commands correspond to what you want the application to do from the beginning:
+
 * Get a list of all the devices in the SD-WAN fabric (device_list).
 * Get a list of all the configuration templates on the vManage instance (template-list).
 * Get a list of the all the variables for a template attached to a particular device
 
-To established session with the vManage server it uses the instance of the authentication class that you called Authentication. 
+To established session with the vManage server it uses the instance of the authentication class that you called Authentication.
 It will use the get_request method of this object to get a list of all the devices and templates in the fabric and store the JSON data that is returned by the API in the response variable.
 It extracts just the [data] portion of the JSON and store it in a variable called items. The items variable at this point contains all the devices in the fabric and many of additional data about each of them
 It now iterates over each item in the items with a for loop and extract data for the hostname, device-type, uuid, system-ip, site-id, version, and device-model of each device. After this uses tabulate to display the data
-```
+
+```code
 cat get-device-template-variable-list.py 
 ```
+
 ```python
 #! /usr/bin/env python
 import requests
@@ -551,7 +564,7 @@ if __name__ == "__main__":
     cli()
 ```
 
-```
+```code
 python3 get-device-template-list.py device-list
 Retrieving the devices.
 ╒═════════════╤═══════════════╤══════════════════════════════════════════╤═════════════╤═══════════╤═══════════════╤════════════════╕
@@ -577,7 +590,7 @@ Retrieving the devices.
 ╘═════════════╧═══════════════╧══════════════════════════════════════════╧═════════════╧═══════════╧═══════════════╧════════════════╛
 ```
 
-```
+```code
 python3 get-device-template-list.py template-list
 Retrieving the templates available.
 ╒═════════════════════════════════════════════════════╤═════════════════════╤══════════════════════════════════════╤════════════════════╤════════════════════╕
@@ -625,19 +638,21 @@ Retrieving the templates available.
 ├─────────────────────────────────────────────────────┼─────────────────────┼──────────────────────────────────────┼────────────────────┼────────────────────┤
 │ BRANCH-TYPE1                                        │ vedge-C8000V        │ ed13d4b5-6059-4865-ab84-0e591b21e45f │                  2 │                 20 │
 ╘═════════════════════════════════════════════════════╧═════════════════════╧══════════════════════════════════════╧════════════════════╧════════════════════╛
-``` 
+```
 
 In the below example we have taken the template and edge id value from the previous output
+
 * template id ```d6231e3c-3613-499c-aabc-57c66999e38d``` which named as ```BRANCH-TYPE```
 * edge id ```C8K-6CA314A2-44A1-A49C-8E10-C36096E78608``` which is named as ```BR2-EDGE1```
 
-```
+```code
 python get-device-template-vairable-list.py variable-list --template_id d6231e3c-3613-499c-aabc-57c66999e38d --edge_id C8K-6CA314A2-44A1-A49C-8E10-C36096E78608
 JSESSIONID=f69jJ_O0vfiahp2WrJL9tI7Hc6f3uT95XeZZ1d-x.f781faf4-cf63-4f7c-9f80-b63169da9c7b
 60BD61E1D1872015AD140F972BDA5282B7117FB79E5306E2010765703506F92A246E8245EFE8EA646FADDC0FD4E3637C3B86
 Attempting to get variable for a device template.
 <Response [200]>
 ```
+
 ```json
 [
     {
@@ -658,10 +673,10 @@ Attempting to get variable for a device template.
 
 ## Step 3: POST with Python
 
-### Change device hostname 
+### Change device hostname
 
 Using the outputs from the previous call, we have the below script which is used to modify any variables for this device.
-To demonstrate we will modify the hostname of the BR2-EDGE11 to BR2-EDGE-TEST 
+To demonstrate we will modify the hostname of the BR2-EDGE11 to BR2-EDGE-TEST
 Observe the payload format for this request. The sample can be taken from the APIDOCS (swagger)
 
 ```Changing hostname to BR2-EDGE1-TEST```
@@ -777,13 +792,17 @@ print(url)
 response = requests.post(url=url, data=payload, headers=headers, verify=False)
 print(response)
 ```
+
+```code
 Run the get variable script to confirm the hostname
-
-### Add vMange Usergroup 
-
 ```
+
+### Add vMange Usergroup
+
+```code
 cat post_sdwan_add_group
 ```
+
 ```python
 #! /usr/bin/env python
 import requests
@@ -880,13 +899,14 @@ if __name__ == '__main__':
  
 ```
 
-```
+```code
 python3 post_sdwan_add_group.py 
 <Response [200]>
 ```
+
 ### Add vManage User
 
-```
+```code
 cat post_sdwan_add_usr.py
 ```
 
@@ -981,7 +1001,7 @@ if __name__ == '__main__':
     print(response)
 ```
 
-```
+```code
 python3 post_sdwan_add_usr.py 
 <Response [200]>
 ```
@@ -990,14 +1010,17 @@ python3 post_sdwan_add_usr.py
 
 The below scripts again uses click to create the CLI component of the application.
 We have 3 options defined
+
 * Get  Policy List
 * Activate Policy
 * Deactivate Policy
 
-The code again use the same authentication class to get the JSESSION ID and Token and then defined the above methods separately 
-```
+The code again use the same authentication class to get the JSESSION ID and Token and then defined the above methods separately
+
+```code
 cat policy-list-activate-deactivate.py 
 ```
+
 ```python
 #! /usr/bin/env python
 import requests
@@ -1216,8 +1239,9 @@ if __name__ == "__main__":
     cli()
 ```
 
-### Get  Policy List
-```
+### Get Policy List
+
+```code
 python3 policy-list-activate-deactivate.py policy-list
 Retrieving the Centralized Policies available.
 ╒══════════════════════════════╤═══════════════╤══════════════════════════════════════╤═══════════════════╕
@@ -1238,17 +1262,17 @@ Retrieving the Centralized Policies available.
 │ Hub-Spoke-Policy-PCI         │ feature       │ 858b7a53-b54f-4927-b5b1-130e84287169 │ False             │
 ╘══════════════════════════════╧═══════════════╧══════════════════════════════════════╧═══════════════════╛
 ```
- 
 
 ### Activate Policy
 
-```
+```code
 python3 policy-list-activate-deactivate.py activate-policy --name MultiTopologyPolicy
 Policy UUID for MultiTopologyPolicy is 6ff80e3c-a8e8-4fbf-9b55-32568093440c
 
 Successfully activated vSmart Policy MultiTopologyPolicy
 ```
-```
+
+```code
 python3 policy-list-activate-deactivate.py policy-list
 Retrieving the Centralized Policies available.
 ╒══════════════════════════════╤═══════════════╤══════════════════════════════════════╤═══════════════════╕
@@ -1272,14 +1296,15 @@ Retrieving the Centralized Policies available.
 ```
 
 ### Deactivate Policy
-```
+
+```code
 python3 policy-list-activate-deactivate.py deactivate-policy --name MultiTopologyPolicy
 Policy UUID for MultiTopologyPolicy is 6ff80e3c-a8e8-4fbf-9b55-32568093440c
 
 Successfully deactivated vSmart Policy MultiTopologyPolicy
 ```
 
-```
+```code
 dcloud@ubuntu:~/lab/final_scripts$ python3 policy-list-activate-deactivate.py policy-list
 Retrieving the Centralized Policies available.
 ╒══════════════════════════════╤═══════════════╤══════════════════════════════════════╤═══════════════════╕
@@ -1301,12 +1326,11 @@ Retrieving the Centralized Policies available.
 ╘══════════════════════════════╧═══════════════╧══════════════════════════════════════╧═══════════════════╛
 ```
 
-
 ## Optional Task
 
 Create another CLI Application with more functions like the created above for template and device list
 
-```
+```code
 cat vmanage_apis.py
 ```
 
