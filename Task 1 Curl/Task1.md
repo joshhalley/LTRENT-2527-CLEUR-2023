@@ -36,16 +36,23 @@ Such scenarios where this happens, is when a certificate is present on the devic
 
 --location 
 
-<josh to update> 
+Permits the operator to use a URL to interface with the server.
 
 --request
 
+Indicates the type of request which will be sent from CURL, in the scenario below, we are looking at a GET request.
+
 --header
+
+Allows the operator to provide the requisite headers that may be needed for interfacing directly with the server.
 
 --data
 
+The payload which is intended to be sent to the server as part of the request. 
+
 --cookie-jar
 
+Location to save cookies which are returned during server communications.
 ## Step 2: Get a list of Devices
 As an example of REST API, let's try "Get device list"
 ```
