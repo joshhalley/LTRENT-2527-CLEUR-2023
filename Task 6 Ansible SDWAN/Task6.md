@@ -8,9 +8,9 @@
 
 # Task 6: Using Ansible with SDWAN vManage  
 
-Ansible has become synonymous with automation in modern companies, providing a means to simplify complex tasks without the need for the network operator to be an expert in programming or scripting languages. 
-This section is going to explore the use of Ansible to achieve a number of actions within the SDWAN architecture. 
--	Use Ansible to execute API calls against vManage to push a template
+Having executed our first playbooks against an IOS XE device in the last section, we have begun to scratch the surface on how ansible can be used to simplify automation in a network. Clearly, for a single router or switch, it is usually overkill to create such logic for a one off activity. If however, the objective is to repeat a task, or deploy and/or execute a job across a broad array of network nodes or systems, Ansible can clearly simplify things. 
+
+-	Using Ansible to execute API calls against vManage to push a template
 
 In this section we are going to shift gears a little bit, and move away from the earlier SDWAN C-Edge executions which Ansible was performing using the SSH protocol. 
 Instead, we are going to be looking at having Ansible directly interface with the API’s which exist within vManage to perform command and control tasks on the system. 
