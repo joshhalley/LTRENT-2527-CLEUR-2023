@@ -15,7 +15,7 @@ This documentation gives you the option of interacting with the API and to see h
 ## Step 1: Open  API docs
 * Login to the following URL to access the API Docs
     * https://198.18.1.10/apidocs
-    * username “admin”* password “C1isco12345”
+    * username “admin”* password “C1sco12345”
 * Observe the different categories of API calls
 ## Step 2: Get a list of Devices
 Scroll down to Monitoring – Device Details 
