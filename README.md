@@ -115,6 +115,6 @@ python3 -m pip install -r requirements.txt
 ```
 To find out the version of an installed package, use
 ```
-pip feeze
+pip freeze
 ```
 
