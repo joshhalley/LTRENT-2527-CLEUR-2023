@@ -34,7 +34,8 @@ Click Try it Out to Execute the API call; upon execution, scroll down and observ
 Scroll down to Real Time Monitoring – Device Contol > expand and go to GET
  /device/control/summary
 ![postman](/images/sw4.png)
-Click Try it out,  this time taking a device id from the previous output and entering it into the dialog box, follow this by clicking the button.
+
+Click Try it out, this time taking a device id from the previous output and entering it into the dialog box, follow this by clicking the button.
 
 ![postman](/images/sw5.png)
 
