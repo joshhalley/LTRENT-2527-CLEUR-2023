@@ -62,7 +62,7 @@ app.run(host='0.0.0.0', port=5001)
 ```
 ## Step 3: Start Webhook Server
 On ubuntu command prompt, run the command python webhook.py to spin up HTTP webhook server.
-```json
+```
 python3 webhook.py 
  * Serving Flask app 'webhook'
  * Debug mode: off
@@ -76,7 +76,7 @@ Press CTRL+C to quit
 * Trigger alarm by clearing control connections on vManage
 * SSH to vManage and give the command “clear control connections”
 
-```json
+```
 python3 webhook.py 
  * Serving Flask app 'webhook-1'
  * Debug mode: off
@@ -85,9 +85,8 @@ WARNING: This is a development server. Do not use it in a production deployment.
  * Running on http://127.0.0.1:5001
  * Running on http://198.18.133.100:5001
 Press CTRL+C to quit
-
-
-
+```
+```json
 Data received from Webhook is:  {
     "suppressed": false,
     "devices": [

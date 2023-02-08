@@ -1,19 +1,18 @@
 [Task 4: Rest API with Python](#task-4-rest-api-with-python)
 * [ Step 1: Authenticate](#step-1-authenticate)
 * [ Step 2: GET with Python](#step-2-get-with-python)
-    * [  GET Edge List](#get-edge-list)
-    * [  GET Device and Template List ](#get-device-and-template-list)
-    * [  Get Template Variable List](#get-template-variable-list)
+    * [GET Controller List](#get-controller-list)
+    * [GET Edge List](#get-edge-list)
+    * [GET Device, Template and Variable List](#get-device-template-and-variable-list)
 * [ Step 3: POST with Python](#step-3-post-with-python)
-    * [  Change device hostname ](#change-device-hostname)
+    * [Change device hostname ](#change-device-hostname)
     * [Add vMange Usergroup ](#add-vmange-usergroup)
     * [Add vMange User ](#add-vmanage-user)
 * [Step 4: SDWAN Policies with Python](#step-4-sdwan-policies-with-python)
     * [Get Policy List](#get-policy-list)
     * [Activate Policy](#activate-policy)
     * [Deactivate Policy](#deactivate-policy)
-   * [Optional Task](#optional-task)
-
+* [Optional Task](#optional-task)
 
 # Task 4: Rest API with Python
 
@@ -133,7 +132,7 @@ dcloud@ubuntu:~/lab/final_scripts$
 ## Step 2: GET with Python
 Now using the above authentication class, we can create scripts to run GET and POST operations
 
-GET Controller List
+### GET Controller List
 
 Below script uses the authentication class and then at the end run a GET for controllers and extracts just the [data] portion of the JSON and store it in a variable called items
 It now iterates over each device in the items with a for loop and extract data for the devicetype and deviceIP. After this display the data as specified in the print statement
@@ -359,19 +358,20 @@ vEdge device => vedge-C8000V with serialnumber 5B0A9622
 ```
 
 
-### GET Device and Template List 
+### GET Device, Template and Variable List 
 
 The below uses click to create the CLI component of the application
-Two CLI commands are grouped under the cli Group: device_list and template-list, The commands correspond to what you want the application to do from the beginning:
+Three CLI commands are grouped under the cli Group: device_list, template-list and variable-list, The commands correspond to what you want the application to do from the beginning:
 * Get a list of all the devices in the SD-WAN fabric (device_list).
 * Get a list of all the configuration templates on the vManage instance (template-list).
+* Get a list of the all the variables for a template attached to a particular device
 
 To established session with the vManage server it uses the instance of the authentication class that you called Authentication. 
 It will use the get_request method of this object to get a list of all the devices and templates in the fabric and store the JSON data that is returned by the API in the response variable.
 It extracts just the [data] portion of the JSON and store it in a variable called items. The items variable at this point contains all the devices in the fabric and many of additional data about each of them
 It now iterates over each item in the items with a for loop and extract data for the hostname, device-type, uuid, system-ip, site-id, version, and device-model of each device. After this uses tabulate to display the data
 ```
-cat get-device-template-list.py 
+cat get-device-template-variable-list.py 
 ```
 ```python
 #! /usr/bin/env python
@@ -450,6 +450,7 @@ if __name__ == '__main__':
 
 ###############################################################################################
 
+
 @click.group()
 def cli():
     """Command line tool for deploying templates to CISCO SDWAN.
@@ -461,7 +462,7 @@ def device_list():
     """Retrieve and return network devices list.
         Returns information about each device that is part of the fabric.
         Example command:
-            ./get-device-template-list.py device_list
+            ./get-device-template-vairable-list.py device_list
     """
     click.secho("Retrieving the devices.")
 
@@ -491,7 +492,7 @@ def template_list():
     """Retrieve and return templates list.
         Returns the templates available on the vManage instance.
         Example command:
-            ./get-device-template-list.py template_list
+            ./get-device-template-vairable-list.py template_list
     """
     click.secho("Retrieving the templates available.")
 
@@ -514,14 +515,42 @@ def template_list():
         click.echo(tabulate.tabulate(table, headers, tablefmt="fancy_grid"))
     except UnicodeEncodeError:
         click.echo(tabulate.tabulate(table, headers, tablefmt="grid"))
+        
+###############################################################################################
+
+@click.command()
+@click.option("--template_id", help="ID of the template")
+@click.option("--edge_id", help="Edge ID")
+def variable_list(template_id, edge_id):
+    """ Get variable list for a device template.
+        Provide template id and edge id as arguments.
+        Example command:
+          ./get-device-template-vairable-list.py variable_list --template_id TemplateID --edge_id EdgeID
+    """
+    click.secho("Attempting to get variable for a device template.")
+    payload = {
+                "templateId":str(template_id),  
+                "deviceIds":
+                    [                    
+                      str(edge_id)
+                    ]
+             }
+
+    payload = json.dumps(payload)
+    mount_point = "/template/device/config/input"
+    response = requests.post(url = f'{base_url}{mount_point}', data = payload, headers=header, verify=False)
+    print(response)
+    items = response.json()['data']
+    print(json.dumps(items, indent=4))
 
 cli.add_command(device_list)
 cli.add_command(template_list)
+cli.add_command(variable_list)
 
 if __name__ == "__main__":
     cli()
-
 ```
+
 ```
 python3 get-device-template-list.py device-list
 Retrieving the devices.
@@ -540,7 +569,7 @@ Retrieving the devices.
 ├─────────────┼───────────────┼──────────────────────────────────────────┼─────────────┼───────────┼───────────────┼────────────────┤
 │ BR1-EDGE22  │ vedge         │ C8K-1789220C-6036-338F-526A-94E545AB8272 │ 10.3.0.2    │       300 │ 17.09.02.0.48 │ vedge-C8000V   │
 ├─────────────┼───────────────┼──────────────────────────────────────────┼─────────────┼───────────┼───────────────┼────────────────┤
-│ BR2-EDGE11  │ vedge         │ C8K-6CA314A2-44A1-A49C-8E10-C36096E78608 │ 10.4.0.1    │       400 │ 17.09.02.0.48 │ vedge-C8000V   │
+│ BR2-EDGE1   │ vedge         │ C8K-6CA314A2-44A1-A49C-8E10-C36096E78608 │ 10.4.0.1    │       400 │ 17.09.02.0.48 │ vedge-C8000V   │
 ├─────────────┼───────────────┼──────────────────────────────────────────┼─────────────┼───────────┼───────────────┼────────────────┤
 │ DC-EDGE1    │ vedge         │ C8K-E75016E7-317F-9987-525B-11816F7A3155 │ 10.1.0.1    │       100 │ 17.09.02.0.48 │ vedge-C8000V   │
 ├─────────────┼───────────────┼──────────────────────────────────────────┼─────────────┼───────────┼───────────────┼────────────────┤
@@ -598,119 +627,25 @@ Retrieving the templates available.
 ╘═════════════════════════════════════════════════════╧═════════════════════╧══════════════════════════════════════╧════════════════════╧════════════════════╛
 ``` 
 
-### Get Template Variable List
-The below script will give the list of all the feature template variables and their respective values for a particular template attached to a particular device. The script uses the same authentication class used earlier
-This output can then used as payload when attaching the respective template to other devices 
-Take the template Id and Edge id from the previous output if needed
+In the below example we have taken the template and edge id value from the previous output
+* template id ```d6231e3c-3613-499c-aabc-57c66999e38d``` which named as ```BRANCH-TYPE```
+* edge id ```C8K-6CA314A2-44A1-A49C-8E10-C36096E78608``` which is named as ```BR2-EDGE1```
 
 ```
-cat get-template-variable.py 
-```
-```python
-#! /usr/bin/env python
-import requests
-import sys
-import json
-import click
-import os
-import tabulate
-import yaml
-import time
-from datetime import date, datetime, timedelta
-import pprint
-from requests.packages.urllib3.exceptions import InsecureRequestWarning
-requests.packages.urllib3.disable_warnings(InsecureRequestWarning)
-
-vmanage_host = os.environ.get("vManage_IP")
-vmanage_port = os.environ.get("vManage_PORT")
-vmanage_username = os.environ.get("vManage_USERNAME") 
-vmanage_password = os.environ.get("vManage_PASSWORD")
-
-if vmanage_host is None or vmanage_port is None or vmanage_username is None or vmanage_password is None:
-    print("CISCO SDWAN details must be set via environment variables before running.")
-    print("export vManage_IP=198.18.1.10")
-    print("export vManage_PORT=8443")
-    print("export vManage_USERNAME=admin")
-    print("export vManage_PASSWORD=C1sco12345")
-    exit()
-
-class Authentication:
-
-    @staticmethod
-    def get_jsessionid(vmanage_host, vmanage_port, username, password):
-        api = "/j_security_check"
-        base_url = "https://%s:%s"%(vmanage_host, vmanage_port)
-        url = base_url + api
-        payload = {'j_username' : username, 'j_password' : password}
-        
-        response = requests.post(url=url, data=payload, verify=False)
-        try:
-            cookies = response.headers["Set-Cookie"]
-            jsessionid = cookies.split(";")
-            return(jsessionid[0])
-        except:
-            print("No valid JSESSION ID returned\n")
-            exit()
-       
-    @staticmethod
-    def get_token(vmanage_host, vmanage_port, jsessionid):
-        headers = {'Cookie': jsessionid}
-        base_url = "https://%s:%s"%(vmanage_host, vmanage_port)
-        api = "/dataservice/client/token"
-        url = base_url + api      
-        response = requests.get(url=url, headers=headers, verify=False)
-        if response.status_code == 200:
-            return(response.text)
-        else:
-            return None
-    
-
-if __name__ == '__main__':
-
-    Auth = Authentication()
-    jsessionid = Auth.get_jsessionid(vmanage_host,vmanage_port,vmanage_username,vmanage_password)
-    print(jsessionid)
-    token = Auth.get_token(vmanage_host,vmanage_port,jsessionid)
-    print(token)
-
-    if token is not None:
-        headers = {'Content-Type': "application/json",'Cookie': jsessionid, 'X-XSRF-TOKEN': token}
-    else:
-        headers = {'Content-Type': "application/json",'Cookie': jsessionid}
-
-    # base dataservice URL
-    base_url = "https://%s:%s/dataservice"%(vmanage_host,vmanage_port)
-
-###############################################################################################
-
-    payload = {
-                "templateId":"d6231e3c-3613-499c-aabc-57c66999e38d",  
-                "deviceIds":
-                    [                    
-                      "C8K-6CA314A2-44A1-A49C-8E10-C36096E78608"
-                    ]
-             }
-
-    payload = json.dumps(payload)
-    mount_point = "/template/device/config/input"
-    response = requests.post(url = f'{base_url}{mount_point}', data = payload, headers=headers, verify=False)
-    print(response)
-    items = response.json()['data']
-    print(json.dumps(items, indent=4))
-``` 
-
-```
-python3 get-template-variable.py 
+python get-device-template-vairable-list.py variable-list --template_id d6231e3c-3613-499c-aabc-57c66999e38d --edge_id C8K-6CA314A2-44A1-A49C-8E10-C36096E78608
+JSESSIONID=f69jJ_O0vfiahp2WrJL9tI7Hc6f3uT95XeZZ1d-x.f781faf4-cf63-4f7c-9f80-b63169da9c7b
+60BD61E1D1872015AD140F972BDA5282B7117FB79E5306E2010765703506F92A246E8245EFE8EA646FADDC0FD4E3637C3B86
+Attempting to get variable for a device template.
+<Response [200]>
 ```
 ```json
-<Response [200]>
 [
     {
         "csv-status": "complete",
         "csv-deviceId": "C8K-6CA314A2-44A1-A49C-8E10-C36096E78608",
         "csv-deviceIP": "10.4.0.1",
-        "csv-host-name": "BR2-EDGE1",
-        "//system/host-name": "BR2-EDGE1",
+        "csv-host-name": "BR2-EDGE11",
+        "//system/host-name": "BR2-EDGE11",
         "//system/system-ip": "10.4.0.1",
         "//system/site-id": "400",
         "/10/vpn-instance/ip/route/vpn10_static_route1_ip_prefix/prefix": "10.4.11.0/24",
@@ -718,6 +653,7 @@ python3 get-template-variable.py
     }
 ]
 ```
+
 ```Change the template id and device id to get the same for other edges```
 
 ## Step 3: POST with Python
@@ -725,7 +661,7 @@ python3 get-template-variable.py
 ### Change device hostname 
 
 Using the outputs from the previous call, we have the below script which is used to modify any variables for this device.
-To demonstrate we will modify the hostname of the BR2 Edge 1 to BR2-EDGE-TEST 
+To demonstrate we will modify the hostname of the BR2-EDGE11 to BR2-EDGE-TEST 
 Observe the payload format for this request. The sample can be taken from the APIDOCS (swagger)
 
 ```Changing hostname to BR2-EDGE1-TEST```
@@ -841,6 +777,7 @@ print(url)
 response = requests.post(url=url, data=payload, headers=headers, verify=False)
 print(response)
 ```
+Run the get variable script to confirm the hostname
 
 ### Add vMange Usergroup 
 
