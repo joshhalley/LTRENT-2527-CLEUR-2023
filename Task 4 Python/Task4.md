@@ -7,6 +7,7 @@
 * [ Step 3: POST with Python](#step-3-post-with-python)
     * [  Change device hostname ](#change-device-hostname)
     * [Add vMange Usergroup ](#add-vmange-usergroup)
+    * [Add vMange User ](#add-vmanage-user)
 * [Step 4: SDWAN Policies with Python](#step-4-sdwan-policies-with-python)
     * [Get Policy List](#get-policy-list)
     * [Activate Policy](#activate-policy)
@@ -31,25 +32,32 @@ o	get_token
 cat vmanage_auth.py 
 ```
 ```python
+#! /usr/bin/env python
 import requests
 import sys
 import json
+import click
+import os
+import tabulate
+import yaml
 import time
 from datetime import date, datetime, timedelta
-import logging
-import yaml
-import os
 import pprint
 from requests.packages.urllib3.exceptions import InsecureRequestWarning
+requests.packages.urllib3.disable_warnings(InsecureRequestWarning)
 
-    # set variables
 vmanage_host = os.environ.get("vManage_IP")
 vmanage_port = os.environ.get("vManage_PORT")
-username = os.environ.get("vManage_USERNAME") 
-password = os.environ.get("vManage_PASSWORD")
+vmanage_username = os.environ.get("vManage_USERNAME") 
+vmanage_password = os.environ.get("vManage_PASSWORD")
 
-requests.packages.urllib3.disable_warnings()
-pp = pprint.PrettyPrinter(indent=4)
+if vmanage_host is None or vmanage_port is None or vmanage_username is None or vmanage_password is None:
+    print("CISCO SDWAN details must be set via environment variables before running.")
+    print("export vManage_IP=198.18.1.10")
+    print("export vManage_PORT=8443")
+    print("export vManage_USERNAME=admin")
+    print("export vManage_PASSWORD=C1sco12345")
+    exit()
 
 class Authentication:
 
@@ -85,7 +93,7 @@ class Authentication:
 if __name__ == '__main__':
 
     Auth = Authentication()
-    jsessionid = Auth.get_jsessionid(vmanage_host,vmanage_port,username,password)
+    jsessionid = Auth.get_jsessionid(vmanage_host,vmanage_port,vmanage_username,vmanage_password)
     print(jsessionid)
     token = Auth.get_token(vmanage_host,vmanage_port,jsessionid)
     print(token)
@@ -97,6 +105,8 @@ if __name__ == '__main__':
 
     # base dataservice URL
     base_url = "https://%s:%s/dataservice"%(vmanage_host,vmanage_port)
+
+###############################################################################################
 ```
 
 •	The final section in the authentication is using the Authentication class 
@@ -131,20 +141,32 @@ It now iterates over each device in the items with a for loop and extract data f
 cat get_sdwan_controller_1.py 
 ```
 ```python
+#! /usr/bin/env python
 import requests
 import sys
 import json
+import click
+import os
+import tabulate
+import yaml
 import time
 from datetime import date, datetime, timedelta
-import logging
-import yaml
-import os
 import pprint
 from requests.packages.urllib3.exceptions import InsecureRequestWarning
+requests.packages.urllib3.disable_warnings(InsecureRequestWarning)
 
+vmanage_host = os.environ.get("vManage_IP")
+vmanage_port = os.environ.get("vManage_PORT")
+vmanage_username = os.environ.get("vManage_USERNAME") 
+vmanage_password = os.environ.get("vManage_PASSWORD")
 
-requests.packages.urllib3.disable_warnings()
-pp = pprint.PrettyPrinter(indent=4)
+if vmanage_host is None or vmanage_port is None or vmanage_username is None or vmanage_password is None:
+    print("CISCO SDWAN details must be set via environment variables before running.")
+    print("export vManage_IP=198.18.1.10")
+    print("export vManage_PORT=8443")
+    print("export vManage_USERNAME=admin")
+    print("export vManage_PASSWORD=C1sco12345")
+    exit()
 
 class Authentication:
 
@@ -176,19 +198,14 @@ class Authentication:
         else:
             return None
     
+
 if __name__ == '__main__':
 
-    # set variables
-    vmanage_host = os.environ.get("vManage_IP")
-    vmanage_port = os.environ.get("vManage_PORT")
-    username = os.environ.get("vManage_USERNAME")
-    password = os.environ.get("vManage_PASSWORD")
-
     Auth = Authentication()
-    jsessionid = Auth.get_jsessionid(vmanage_host,vmanage_port,username,password)
-#    print(jsessionid)
+    jsessionid = Auth.get_jsessionid(vmanage_host,vmanage_port,vmanage_username,vmanage_password)
+    print(jsessionid)
     token = Auth.get_token(vmanage_host,vmanage_port,jsessionid)
-#    print(token)
+    print(token)
 
     if token is not None:
         headers = {'Content-Type': "application/json",'Cookie': jsessionid, 'X-XSRF-TOKEN': token}
@@ -245,20 +262,32 @@ Modify the code as below if you want to see the full response in pretty format
 cat get_sdwan_edges_1.py
 ```
 ```python
+#! /usr/bin/env python
 import requests
 import sys
 import json
+import click
+import os
+import tabulate
+import yaml
 import time
 from datetime import date, datetime, timedelta
-import logging
-import yaml
-import os
 import pprint
 from requests.packages.urllib3.exceptions import InsecureRequestWarning
+requests.packages.urllib3.disable_warnings(InsecureRequestWarning)
 
+vmanage_host = os.environ.get("vManage_IP")
+vmanage_port = os.environ.get("vManage_PORT")
+vmanage_username = os.environ.get("vManage_USERNAME") 
+vmanage_password = os.environ.get("vManage_PASSWORD")
 
-requests.packages.urllib3.disable_warnings()
-pp = pprint.PrettyPrinter(indent=4)
+if vmanage_host is None or vmanage_port is None or vmanage_username is None or vmanage_password is None:
+    print("CISCO SDWAN details must be set via environment variables before running.")
+    print("export vManage_IP=198.18.1.10")
+    print("export vManage_PORT=8443")
+    print("export vManage_USERNAME=admin")
+    print("export vManage_PASSWORD=C1sco12345")
+    exit()
 
 class Authentication:
 
@@ -291,20 +320,13 @@ class Authentication:
             return None
     
 
-
 if __name__ == '__main__':
 
-    # set variables
-    vmanage_host = os.environ.get("vManage_IP")
-    vmanage_port = os.environ.get("vManage_PORT")
-    username = os.environ.get("vManage_USERNAME")
-    password = os.environ.get("vManage_PASSWORD")
-
     Auth = Authentication()
-    jsessionid = Auth.get_jsessionid(vmanage_host,vmanage_port,username,password)
-#    print(jsessionid)
+    jsessionid = Auth.get_jsessionid(vmanage_host,vmanage_port,vmanage_username,vmanage_password)
+    print(jsessionid)
     token = Auth.get_token(vmanage_host,vmanage_port,jsessionid)
-#    print(token)
+    print(token)
 
     if token is not None:
         headers = {'Content-Type': "application/json",'Cookie': jsessionid, 'X-XSRF-TOKEN': token}
@@ -352,16 +374,7 @@ It now iterates over each item in the items with a for loop and extract data for
 cat get-device-template-list.py 
 ```
 ```python
-#! /usr/bin/env python3
-"""
-Class with REST Api GET and POST libraries
-Example: python rest_api_lib.py vmanage_hostname username password
-PARAMETERS:
-    vmanage_hostname : Ip address of the vmanage or the dns name of the vmanage
-    username : Username to login the vmanage
-    password : Password to login the vmanage
-Note: All the three arguments are manadatory
-"""
+#! /usr/bin/env python
 import requests
 import sys
 import json
@@ -369,22 +382,25 @@ import click
 import os
 import tabulate
 import yaml
+import time
+from datetime import date, datetime, timedelta
+import pprint
 from requests.packages.urllib3.exceptions import InsecureRequestWarning
 requests.packages.urllib3.disable_warnings(InsecureRequestWarning)
 
 vmanage_host = os.environ.get("vManage_IP")
 vmanage_port = os.environ.get("vManage_PORT")
-vmanage_username = os.environ.get("vManage_USERNAME")
+vmanage_username = os.environ.get("vManage_USERNAME") 
 vmanage_password = os.environ.get("vManage_PASSWORD")
 
-if vmanage_host is None or vmanage_port is None or vmanage_username is None or vmanage_password is None :
+if vmanage_host is None or vmanage_port is None or vmanage_username is None or vmanage_password is None:
     print("CISCO SDWAN details must be set via environment variables before running.")
     print("export vManage_IP=198.18.1.10")
     print("export vManage_PORT=8443")
     print("export vManage_USERNAME=admin")
     print("export vManage_PASSWORD=C1sco12345")
-    print("")
     exit()
+
 class Authentication:
 
     @staticmethod
@@ -400,8 +416,7 @@ class Authentication:
             jsessionid = cookies.split(";")
             return(jsessionid[0])
         except:
-            if logger is not None:
-                logger.error("No valid JSESSION ID returned\n")
+            print("No valid JSESSION ID returned\n")
             exit()
        
     @staticmethod
@@ -415,17 +430,23 @@ class Authentication:
             return(response.text)
         else:
             return None
+    
 
-Auth = Authentication()
-jsessionid = Auth.get_jsessionid(vmanage_host,vmanage_port,vmanage_username,vmanage_password)
-token = Auth.get_token(vmanage_host,vmanage_port,jsessionid)
+if __name__ == '__main__':
 
-if token is not None:
-    header = {'Content-Type': "application/json",'Cookie': jsessionid, 'X-XSRF-TOKEN': token}
-else:
-    header = {'Content-Type': "application/json",'Cookie': jsessionid}
+    Auth = Authentication()
+    jsessionid = Auth.get_jsessionid(vmanage_host,vmanage_port,vmanage_username,vmanage_password)
+    print(jsessionid)
+    token = Auth.get_token(vmanage_host,vmanage_port,jsessionid)
+    print(token)
 
-base_url = "https://%s:%s/dataservice"%(vmanage_host, vmanage_port)
+    if token is not None:
+        header = {'Content-Type': "application/json",'Cookie': jsessionid, 'X-XSRF-TOKEN': token}
+    else:
+        header = {'Content-Type': "application/json",'Cookie': jsessionid}
+
+    # base dataservice URL
+    base_url = "https://%s:%s/dataservice"%(vmanage_host,vmanage_port)
 
 ###############################################################################################
 
@@ -578,7 +599,7 @@ Retrieving the templates available.
 ``` 
 
 ### Get Template Variable List
-The below script will give the list of all variable and their respective values for a particular template attached to a particular device. The script uses the same authentication class used earlier
+The below script will give the list of all the feature template variables and their respective values for a particular template attached to a particular device. The script uses the same authentication class used earlier
 This output can then used as payload when attaching the respective template to other devices 
 Take the template Id and Edge id from the previous output if needed
 
@@ -586,26 +607,33 @@ Take the template Id and Edge id from the previous output if needed
 cat get-template-variable.py 
 ```
 ```python
+#! /usr/bin/env python
 import requests
 import sys
 import json
+import click
+import os
+import tabulate
+import yaml
 import time
 from datetime import date, datetime, timedelta
-import logging
-import yaml
-import os
 import pprint
 from requests.packages.urllib3.exceptions import InsecureRequestWarning
+requests.packages.urllib3.disable_warnings(InsecureRequestWarning)
 
-    # set variables
 vmanage_host = os.environ.get("vManage_IP")
 vmanage_port = os.environ.get("vManage_PORT")
-username = os.environ.get("vManage_USERNAME") 
-password = os.environ.get("vManage_PASSWORD")
+vmanage_username = os.environ.get("vManage_USERNAME") 
+vmanage_password = os.environ.get("vManage_PASSWORD")
 
+if vmanage_host is None or vmanage_port is None or vmanage_username is None or vmanage_password is None:
+    print("CISCO SDWAN details must be set via environment variables before running.")
+    print("export vManage_IP=198.18.1.10")
+    print("export vManage_PORT=8443")
+    print("export vManage_USERNAME=admin")
+    print("export vManage_PASSWORD=C1sco12345")
+    exit()
 
-requests.packages.urllib3.disable_warnings()
-pp = pprint.PrettyPrinter(indent=4)
 class Authentication:
 
     @staticmethod
@@ -637,12 +665,13 @@ class Authentication:
             return None
     
 
-
 if __name__ == '__main__':
 
     Auth = Authentication()
-    jsessionid = Auth.get_jsessionid(vmanage_host,vmanage_port,username,password)
+    jsessionid = Auth.get_jsessionid(vmanage_host,vmanage_port,vmanage_username,vmanage_password)
+    print(jsessionid)
     token = Auth.get_token(vmanage_host,vmanage_port,jsessionid)
+    print(token)
 
     if token is not None:
         headers = {'Content-Type': "application/json",'Cookie': jsessionid, 'X-XSRF-TOKEN': token}
@@ -689,14 +718,14 @@ python3 get-template-variable.py
     }
 ]
 ```
-
+```Change the template id and device id to get the same for other edges```
 
 ## Step 3: POST with Python
 
 ### Change device hostname 
 
-Using the outputs from the previous 2 calls, we have the below script which is used to modify any variables for this device.
-To demonstrate we will modify the hostname of the router 
+Using the outputs from the previous call, we have the below script which is used to modify any variables for this device.
+To demonstrate we will modify the hostname of the BR2 Edge 1 to BR2-EDGE-TEST 
 Observe the payload format for this request. The sample can be taken from the APIDOCS (swagger)
 
 ```Changing hostname to BR2-EDGE1-TEST```
@@ -704,20 +733,32 @@ Observe the payload format for this request. The sample can be taken from the AP
 modify-device-variable.py
 
 ```python
+#! /usr/bin/env python
 import requests
 import sys
 import json
+import click
+import os
+import tabulate
+import yaml
 import time
 from datetime import date, datetime, timedelta
-import logging
-import yaml
-import os
 import pprint
 from requests.packages.urllib3.exceptions import InsecureRequestWarning
+requests.packages.urllib3.disable_warnings(InsecureRequestWarning)
 
+vmanage_host = os.environ.get("vManage_IP")
+vmanage_port = os.environ.get("vManage_PORT")
+vmanage_username = os.environ.get("vManage_USERNAME") 
+vmanage_password = os.environ.get("vManage_PASSWORD")
 
-requests.packages.urllib3.disable_warnings()
-pp = pprint.PrettyPrinter(indent=4)
+if vmanage_host is None or vmanage_port is None or vmanage_username is None or vmanage_password is None:
+    print("CISCO SDWAN details must be set via environment variables before running.")
+    print("export vManage_IP=198.18.1.10")
+    print("export vManage_PORT=8443")
+    print("export vManage_USERNAME=admin")
+    print("export vManage_PASSWORD=C1sco12345")
+    exit()
 
 class Authentication:
 
@@ -750,20 +791,13 @@ class Authentication:
             return None
     
 
-
 if __name__ == '__main__':
 
-    # set variables
-    vmanage_host = os.environ.get("vManage_IP")
-    vmanage_port = os.environ.get("vManage_PORT")
-    username = os.environ.get("vManage_USERNAME")
-    password = os.environ.get("vManage_PASSWORD")
-
     Auth = Authentication()
-    jsessionid = Auth.get_jsessionid(vmanage_host,vmanage_port,username,password)
-#    print(jsessionid)
+    jsessionid = Auth.get_jsessionid(vmanage_host,vmanage_port,vmanage_username,vmanage_password)
+    print(jsessionid)
     token = Auth.get_token(vmanage_host,vmanage_port,jsessionid)
-#    print(token)
+    print(token)
 
     if token is not None:
         headers = {'Content-Type': "application/json",'Cookie': jsessionid, 'X-XSRF-TOKEN': token}
@@ -814,21 +848,32 @@ print(response)
 cat post_sdwan_add_group
 ```
 ```python
+#! /usr/bin/env python
 import requests
 import sys
 import json
+import click
+import os
+import tabulate
+import yaml
 import time
 from datetime import date, datetime, timedelta
-import logging
-import yaml
-import os
 import pprint
-from logging.handlers import TimedRotatingFileHandler
 from requests.packages.urllib3.exceptions import InsecureRequestWarning
+requests.packages.urllib3.disable_warnings(InsecureRequestWarning)
 
+vmanage_host = os.environ.get("vManage_IP")
+vmanage_port = os.environ.get("vManage_PORT")
+vmanage_username = os.environ.get("vManage_USERNAME") 
+vmanage_password = os.environ.get("vManage_PASSWORD")
 
-requests.packages.urllib3.disable_warnings()
-pp = pprint.PrettyPrinter(indent=4)
+if vmanage_host is None or vmanage_port is None or vmanage_username is None or vmanage_password is None:
+    print("CISCO SDWAN details must be set via environment variables before running.")
+    print("export vManage_IP=198.18.1.10")
+    print("export vManage_PORT=8443")
+    print("export vManage_USERNAME=admin")
+    print("export vManage_PASSWORD=C1sco12345")
+    exit()
 
 class Authentication:
 
@@ -861,18 +906,13 @@ class Authentication:
             return None
     
 
-
 if __name__ == '__main__':
 
-    # set variables
-    vmanage_host = "198.18.1.10"
-    vmanage_port = "8443"
-    username = "admin"
-    password = "C1sco12345"
-
     Auth = Authentication()
-    jsessionid = Auth.get_jsessionid(vmanage_host,vmanage_port,username,password)
+    jsessionid = Auth.get_jsessionid(vmanage_host,vmanage_port,vmanage_username,vmanage_password)
+    print(jsessionid)
     token = Auth.get_token(vmanage_host,vmanage_port,jsessionid)
+    print(token)
 
     if token is not None:
         headers = {'Content-Type': "application/json",'Cookie': jsessionid, 'X-XSRF-TOKEN': token}
@@ -906,9 +946,89 @@ if __name__ == '__main__':
 ```
 python3 post_sdwan_add_group.py 
 <Response [200]>
-Add vManage User
-###############################################################################################
+```
+### Add vManage User
 
+```
+cat post_sdwan_add_usr.py
+```
+
+```python
+#! /usr/bin/env python
+import requests
+import sys
+import json
+import click
+import os
+import tabulate
+import yaml
+import time
+from datetime import date, datetime, timedelta
+import pprint
+from requests.packages.urllib3.exceptions import InsecureRequestWarning
+requests.packages.urllib3.disable_warnings(InsecureRequestWarning)
+
+vmanage_host = os.environ.get("vManage_IP")
+vmanage_port = os.environ.get("vManage_PORT")
+vmanage_username = os.environ.get("vManage_USERNAME") 
+vmanage_password = os.environ.get("vManage_PASSWORD")
+
+if vmanage_host is None or vmanage_port is None or vmanage_username is None or vmanage_password is None:
+    print("CISCO SDWAN details must be set via environment variables before running.")
+    print("export vManage_IP=198.18.1.10")
+    print("export vManage_PORT=8443")
+    print("export vManage_USERNAME=admin")
+    print("export vManage_PASSWORD=C1sco12345")
+    exit()
+
+class Authentication:
+
+    @staticmethod
+    def get_jsessionid(vmanage_host, vmanage_port, username, password):
+        api = "/j_security_check"
+        base_url = "https://%s:%s"%(vmanage_host, vmanage_port)
+        url = base_url + api
+        payload = {'j_username' : username, 'j_password' : password}
+        
+        response = requests.post(url=url, data=payload, verify=False)
+        try:
+            cookies = response.headers["Set-Cookie"]
+            jsessionid = cookies.split(";")
+            return(jsessionid[0])
+        except:
+            print("No valid JSESSION ID returned\n")
+            exit()
+       
+    @staticmethod
+    def get_token(vmanage_host, vmanage_port, jsessionid):
+        headers = {'Cookie': jsessionid}
+        base_url = "https://%s:%s"%(vmanage_host, vmanage_port)
+        api = "/dataservice/client/token"
+        url = base_url + api      
+        response = requests.get(url=url, headers=headers, verify=False)
+        if response.status_code == 200:
+            return(response.text)
+        else:
+            return None
+    
+
+if __name__ == '__main__':
+
+    Auth = Authentication()
+    jsessionid = Auth.get_jsessionid(vmanage_host,vmanage_port,vmanage_username,vmanage_password)
+    print(jsessionid)
+    token = Auth.get_token(vmanage_host,vmanage_port,jsessionid)
+    print(token)
+
+    if token is not None:
+        headers = {'Content-Type': "application/json",'Cookie': jsessionid, 'X-XSRF-TOKEN': token}
+    else:
+        headers = {'Content-Type': "application/json",'Cookie': jsessionid}
+
+    # base dataservice URL
+    base_url = "https://%s:%s/dataservice"%(vmanage_host,vmanage_port)
+
+###############################################################################################
     payload = {
    "group":[
       "pythongrp"
@@ -922,7 +1042,9 @@ Add vManage User
     mount_point = "/admin/user"
     response = requests.post(url = f'{base_url}{mount_point}', data = payload, headers=headers, verify=False)
     print(response)
+```
 
+```
 python3 post_sdwan_add_usr.py 
 <Response [200]>
 ```
@@ -941,30 +1063,31 @@ cat policy-list-activate-deactivate.py
 ```
 ```python
 #! /usr/bin/env python
-
+import requests
+import sys
+import json
+import click
 import os
 import tabulate
-import requests
-import click
-import json
-import sys
-
-requests.packages.urllib3.disable_warnings()
-
+import yaml
+import time
+from datetime import date, datetime, timedelta
+import pprint
 from requests.packages.urllib3.exceptions import InsecureRequestWarning
+requests.packages.urllib3.disable_warnings(InsecureRequestWarning)
 
 vmanage_host = os.environ.get("vManage_IP")
 vmanage_port = os.environ.get("vManage_PORT")
-vmanage_username = os.environ.get("vManage_USERNAME")
+vmanage_username = os.environ.get("vManage_USERNAME") 
 vmanage_password = os.environ.get("vManage_PASSWORD")
 
 if vmanage_host is None or vmanage_port is None or vmanage_username is None or vmanage_password is None:
-    print("For Windows Workstation, vManage details must be set via environment variables using below commands")
+    print("CISCO SDWAN details must be set via environment variables before running.")
     print("export vManage_IP=198.18.1.10")
-    print("export vManage_PORT=443")
+    print("export vManage_PORT=8443")
     print("export vManage_USERNAME=admin")
     print("export vManage_PASSWORD=C1sco12345")
-
+    exit()
 
 class Authentication:
 
@@ -981,7 +1104,7 @@ class Authentication:
             jsessionid = cookies.split(";")
             return(jsessionid[0])
         except:
-            click.echo("No valid JSESSION ID returned\n")
+            print("No valid JSESSION ID returned\n")
             exit()
        
     @staticmethod
@@ -995,18 +1118,23 @@ class Authentication:
             return(response.text)
         else:
             return None
+    
 
+if __name__ == '__main__':
 
-Auth = Authentication()
-jsessionid = Auth.get_jsessionid(vmanage_host,vmanage_port,vmanage_username,vmanage_password)
-token = Auth.get_token(vmanage_host,vmanage_port,jsessionid)
+    Auth = Authentication()
+    jsessionid = Auth.get_jsessionid(vmanage_host,vmanage_port,vmanage_username,vmanage_password)
+    print(jsessionid)
+    token = Auth.get_token(vmanage_host,vmanage_port,jsessionid)
+    print(token)
 
-if token is not None:
-    header = {'Content-Type': "application/json",'Cookie': jsessionid, 'X-XSRF-TOKEN': token}
-else:
-    header = {'Content-Type': "application/json",'Cookie': jsessionid}
+    if token is not None:
+        header = {'Content-Type': "application/json",'Cookie': jsessionid, 'X-XSRF-TOKEN': token}
+    else:
+        header = {'Content-Type': "application/json",'Cookie': jsessionid}
 
-base_url = "https://%s:%s/dataservice"%(vmanage_host, vmanage_port)
+    # base dataservice URL
+    base_url = "https://%s:%s/dataservice"%(vmanage_host,vmanage_port)
 
 ###############################################################################################
 
@@ -1255,25 +1383,22 @@ import os
 import tabulate
 import yaml
 import time
+from datetime import date, datetime, timedelta
+import pprint
 from requests.packages.urllib3.exceptions import InsecureRequestWarning
 requests.packages.urllib3.disable_warnings(InsecureRequestWarning)
 
 vmanage_host = os.environ.get("vManage_IP")
 vmanage_port = os.environ.get("vManage_PORT")
-username = os.environ.get("vManage_USERNAME") 
-password = os.environ.get("vManage_PASSWORD")
+vmanage_username = os.environ.get("vManage_USERNAME") 
+vmanage_password = os.environ.get("vManage_PASSWORD")
 
 if vmanage_host is None or vmanage_port is None or vmanage_username is None or vmanage_password is None:
-    print("For Windows Workstation, vManage details must be set via environment variables using below commands")
-    print("set vmanage_host=198.18.1.10")
-    print("set vmanage_port=8443")
-    print("set vmanage_username=admin")
-    print("set vmanage_password=admin")
-    print("For MAC OSX Workstation, vManage details must be set via environment variables using below commands")
-    print("export vmanage_host=198.18.1.10")
-    print("export vmanage_port=8443")
-    print("export vmanage_username=admin")
-    print("export vmanage_password=admin")
+    print("CISCO SDWAN details must be set via environment variables before running.")
+    print("export vManage_IP=198.18.1.10")
+    print("export vManage_PORT=8443")
+    print("export vManage_USERNAME=admin")
+    print("export vManage_PASSWORD=C1sco12345")
     exit()
 
 class Authentication:
@@ -1291,8 +1416,7 @@ class Authentication:
             jsessionid = cookies.split(";")
             return(jsessionid[0])
         except:
-            if logger is not None:
-                logger.error("No valid JSESSION ID returned\n")
+            print("No valid JSESSION ID returned\n")
             exit()
        
     @staticmethod
@@ -1306,19 +1430,26 @@ class Authentication:
             return(response.text)
         else:
             return None
+    
 
-Auth = Authentication()
-jsessionid = Auth.get_jsessionid(vmanage_host,vmanage_port,vmanage_username,vmanage_password)
-token = Auth.get_token(vmanage_host,vmanage_port,jsessionid)
+if __name__ == '__main__':
 
-if token is not None:
-    header = {'Content-Type': "application/json",'Cookie': jsessionid, 'X-XSRF-TOKEN': token}
-else:
-    header = {'Content-Type': "application/json",'Cookie': jsessionid}
+    Auth = Authentication()
+    jsessionid = Auth.get_jsessionid(vmanage_host,vmanage_port,vmanage_username,vmanage_password)
+    print(jsessionid)
+    token = Auth.get_token(vmanage_host,vmanage_port,jsessionid)
+    print(token)
 
-base_url = "https://%s:%s/dataservice"%(vmanage_host, vmanage_port)
+    if token is not None:
+        headers = {'Content-Type': "application/json",'Cookie': jsessionid, 'X-XSRF-TOKEN': token}
+    else:
+        headers = {'Content-Type': "application/json",'Cookie': jsessionid}
 
-#############################################################################################################
+    # base dataservice URL
+    base_url = "https://%s:%s/dataservice"%(vmanage_host,vmanage_port)
+
+###############################################################################################
+
 
 @click.group()
 def cli():
@@ -1613,7 +1744,6 @@ cli.add_command(interface_status)
 cli.add_command(control_status)
 cli.add_command(device_counters)
 cli.add_command(attached_devices)
-cli.add_command(device_list)
 
 if __name__ == "__main__":
     cli()

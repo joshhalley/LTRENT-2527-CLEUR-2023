@@ -1,13 +1,4 @@
-#! /usr/bin/env python3
-"""
-Class with REST Api GET and POST libraries
-Example: python rest_api_lib.py vmanage_hostname username password
-PARAMETERS:
-    vmanage_hostname : Ip address of the vmanage or the dns name of the vmanage
-    username : Username to login the vmanage
-    password : Password to login the vmanage
-Note: All the three arguments are manadatory
-"""
+#! /usr/bin/env python
 import requests
 import sys
 import json
@@ -15,22 +6,25 @@ import click
 import os
 import tabulate
 import yaml
+import time
+from datetime import date, datetime, timedelta
+import pprint
 from requests.packages.urllib3.exceptions import InsecureRequestWarning
 requests.packages.urllib3.disable_warnings(InsecureRequestWarning)
 
 vmanage_host = os.environ.get("vManage_IP")
 vmanage_port = os.environ.get("vManage_PORT")
-vmanage_username = os.environ.get("vManage_USERNAME")
+vmanage_username = os.environ.get("vManage_USERNAME") 
 vmanage_password = os.environ.get("vManage_PASSWORD")
 
-if vmanage_host is None or vmanage_port is None or vmanage_username is None or vmanage_password is None :
+if vmanage_host is None or vmanage_port is None or vmanage_username is None or vmanage_password is None:
     print("CISCO SDWAN details must be set via environment variables before running.")
-    print("export vManage_IP=10.10.20.90")
+    print("export vManage_IP=198.18.1.10")
     print("export vManage_PORT=8443")
     print("export vManage_USERNAME=admin")
     print("export vManage_PASSWORD=C1sco12345")
-    print("")
     exit()
+
 class Authentication:
 
     @staticmethod
@@ -46,8 +40,7 @@ class Authentication:
             jsessionid = cookies.split(";")
             return(jsessionid[0])
         except:
-            if logger is not None:
-                logger.error("No valid JSESSION ID returned\n")
+            print("No valid JSESSION ID returned\n")
             exit()
        
     @staticmethod
@@ -61,19 +54,26 @@ class Authentication:
             return(response.text)
         else:
             return None
+    
 
-Auth = Authentication()
-jsessionid = Auth.get_jsessionid(vmanage_host,vmanage_port,vmanage_username,vmanage_password)
-token = Auth.get_token(vmanage_host,vmanage_port,jsessionid)
+if __name__ == '__main__':
 
-if token is not None:
-    header = {'Content-Type': "application/json",'Cookie': jsessionid, 'X-XSRF-TOKEN': token}
-else:
-    header = {'Content-Type': "application/json",'Cookie': jsessionid}
+    Auth = Authentication()
+    jsessionid = Auth.get_jsessionid(vmanage_host,vmanage_port,vmanage_username,vmanage_password)
+    print(jsessionid)
+    token = Auth.get_token(vmanage_host,vmanage_port,jsessionid)
+    print(token)
 
-base_url = "https://%s:%s/dataservice"%(vmanage_host, vmanage_port)
+    if token is not None:
+        header = {'Content-Type': "application/json",'Cookie': jsessionid, 'X-XSRF-TOKEN': token}
+    else:
+        header = {'Content-Type': "application/json",'Cookie': jsessionid}
+
+    # base dataservice URL
+    base_url = "https://%s:%s/dataservice"%(vmanage_host,vmanage_port)
 
 ###############################################################################################
+
 
 @click.group()
 def cli():

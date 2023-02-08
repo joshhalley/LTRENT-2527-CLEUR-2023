@@ -1,23 +1,30 @@
+#! /usr/bin/env python
 import requests
 import sys
 import json
+import click
+import os
+import tabulate
+import yaml
 import time
 from datetime import date, datetime, timedelta
-import logging
-import yaml
-import os
 import pprint
 from requests.packages.urllib3.exceptions import InsecureRequestWarning
+requests.packages.urllib3.disable_warnings(InsecureRequestWarning)
 
-    # set variables
 vmanage_host = os.environ.get("vManage_IP")
 vmanage_port = os.environ.get("vManage_PORT")
-username = os.environ.get("vManage_USERNAME") 
-password = os.environ.get("vManage_PASSWORD")
+vmanage_username = os.environ.get("vManage_USERNAME") 
+vmanage_password = os.environ.get("vManage_PASSWORD")
 
+if vmanage_host is None or vmanage_port is None or vmanage_username is None or vmanage_password is None:
+    print("CISCO SDWAN details must be set via environment variables before running.")
+    print("export vManage_IP=198.18.1.10")
+    print("export vManage_PORT=8443")
+    print("export vManage_USERNAME=admin")
+    print("export vManage_PASSWORD=C1sco12345")
+    exit()
 
-requests.packages.urllib3.disable_warnings()
-pp = pprint.PrettyPrinter(indent=4)
 class Authentication:
 
     @staticmethod
@@ -49,12 +56,13 @@ class Authentication:
             return None
     
 
-
 if __name__ == '__main__':
 
     Auth = Authentication()
-    jsessionid = Auth.get_jsessionid(vmanage_host,vmanage_port,username,password)
+    jsessionid = Auth.get_jsessionid(vmanage_host,vmanage_port,vmanage_username,vmanage_password)
+    print(jsessionid)
     token = Auth.get_token(vmanage_host,vmanage_port,jsessionid)
+    print(token)
 
     if token is not None:
         headers = {'Content-Type': "application/json",'Cookie': jsessionid, 'X-XSRF-TOKEN': token}
@@ -65,6 +73,7 @@ if __name__ == '__main__':
     base_url = "https://%s:%s/dataservice"%(vmanage_host,vmanage_port)
 
 ###############################################################################################
+
 
     payload = {
                 "templateId":"d6231e3c-3613-499c-aabc-57c66999e38d",  

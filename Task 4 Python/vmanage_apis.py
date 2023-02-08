@@ -7,25 +7,22 @@ import os
 import tabulate
 import yaml
 import time
+from datetime import date, datetime, timedelta
+import pprint
 from requests.packages.urllib3.exceptions import InsecureRequestWarning
 requests.packages.urllib3.disable_warnings(InsecureRequestWarning)
 
 vmanage_host = os.environ.get("vManage_IP")
 vmanage_port = os.environ.get("vManage_PORT")
-username = os.environ.get("vManage_USERNAME") 
-password = os.environ.get("vManage_PASSWORD")
+vmanage_username = os.environ.get("vManage_USERNAME") 
+vmanage_password = os.environ.get("vManage_PASSWORD")
 
 if vmanage_host is None or vmanage_port is None or vmanage_username is None or vmanage_password is None:
-    print("For Windows Workstation, vManage details must be set via environment variables using below commands")
-    print("set vmanage_host=198.18.1.10")
-    print("set vmanage_port=8443")
-    print("set vmanage_username=admin")
-    print("set vmanage_password=admin")
-    print("For MAC OSX Workstation, vManage details must be set via environment variables using below commands")
-    print("export vmanage_host=198.18.1.10")
-    print("export vmanage_port=8443")
-    print("export vmanage_username=admin")
-    print("export vmanage_password=admin")
+    print("CISCO SDWAN details must be set via environment variables before running.")
+    print("export vManage_IP=198.18.1.10")
+    print("export vManage_PORT=8443")
+    print("export vManage_USERNAME=admin")
+    print("export vManage_PASSWORD=C1sco12345")
     exit()
 
 class Authentication:
