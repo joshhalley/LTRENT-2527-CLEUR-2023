@@ -17,11 +17,11 @@
 # Task 4: Rest API with Python
 
 Postman is great to start interacting with and discovering APIs, but to automate and program the infrastructure, you need to build code that can be reused
-We will now explore the APIs using python
+We will now explore the APIs using python.
 
 ## Step 1: Authenticate
 
-Below is the script for authentication, in which we have the following 
+Below is the script for authentication, in which we have the following: 
 •	A class named Authenticaton
 •	Under the class we have defined 2 functions 
 o	get_jsessionid
