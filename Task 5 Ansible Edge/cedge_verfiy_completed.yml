@@ -1,6 +1,12 @@
-tasks:
+---
+- name: Show Examples
+  hosts: CiscoLive
+  connection: network_cli
+  gather_facts: no
 
-    - name: Gathering IOS Facts
+  tasks:
+
+    - name: GATHERING FACTS
       ios_facts:
         gather_subset: min
 
@@ -9,7 +15,7 @@ tasks:
         commands: show sdwan control connections
       register: sdwanctlcon
 
-    - name: display Control Connections
+    - name: display Connections
       debug:
         var: sdwanctlcon["stdout_lines"][0]
 

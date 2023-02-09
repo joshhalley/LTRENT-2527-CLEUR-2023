@@ -144,4 +144,4 @@ At the top of the code snippet, the requests library is imported, after which va
 The response variable contains the response of the POST request and at the end, the text method of the response object is displayed to the user.
 You can do the same for all the other calls you explored in this Lab and obtain the Python code for them. You can then combine them in scripts and applications for automation and network programmability purposes
 
-``` Explore the other calls in the collection at your leisure``
+``` Explore the other calls in the collection at your leisure```

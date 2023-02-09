@@ -1,5 +1,6 @@
 ansible==6.7.0
 ansible-core==2.13.7
+ansible-pylibssh
 certifi==2019.3.9
 chardet==3.0.4
 click==8.1.3

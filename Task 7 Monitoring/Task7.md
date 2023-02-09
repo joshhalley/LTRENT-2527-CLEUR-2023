@@ -48,7 +48,7 @@ Set up webhook server to accept notifications sent from vManage.
 * Defined webhook() function accepts the POST request at route "http://198.18.133.100:5001/" and extracts the data from request and prints with Indent.
 
 ```code
-cat webhook.py 
+vim webhook.py 
 ```
 
 ```python
@@ -76,6 +76,9 @@ On ubuntu command prompt, run the command python webhook.py to spin up HTTP webh
 
 ```code
 python3 webhook.py 
+```
+
+```code
  * Serving Flask app 'webhook'
  * Debug mode: off
 WARNING: This is a development server. Do not use it in a production deployment. Use a production WSGI server instead.

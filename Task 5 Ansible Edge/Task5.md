@@ -33,30 +33,41 @@ To verify the installation state of Ansible, the execution of ansible –version
 
 ```code
 ansible --version
-/home/dcloud/.local/lib/python3.8/site-packages/paramiko/transport.py:219: CryptographyDeprecationWarning: Blowfish has been deprecated
-  "class": algorithms.Blowfish,
+```
+
+```code
 ansible [core 2.13.7]
   config file = /etc/ansible/ansible.cfg
-  configured module search path = ['/home/dcloud/.ansible/plugins/modules', '/usr/share/ansible/plugins/modules']
-  ansible python module location = /home/dcloud/.local/lib/python3.8/site-packages/ansible
-  ansible collection location = /home/dcloud/.ansible/collections:/usr/share/ansible/collections
-  executable location = /home/dcloud/.local/bin/ansible
+  configured module search path = ['/home/lab/.ansible/plugins/modules', '/usr/share/ansible/plugins/modules']
+  ansible python module location = /home/lab/.local/lib/python3.8/site-packages/ansible
+  ansible collection location = /home/lab/.ansible/collections:/usr/share/ansible/collections
+  executable location = /home/lab/.local/bin/ansible
   python version = 3.8.10 (default, Nov 14 2022, 12:59:47) [GCC 9.4.0]
   jinja version = 3.1.2
   libyaml = True
 ```
 
 Interesting points to observe from the above output, is the location of the ansible.cfg file – this file is responsible for defining key charateristics for your Ansible automation activities, and the subsequent execution of ad-hoc tasks and playbooks.  
-It is also good to note the version of ansible which is running, and the version of python. Ansible modules are written in the python scripting language.
+It is also good to note the version of ansible which is running, and the version of python.
+Ansible modules are written in the python scripting language.
 
 ## Step 2: Create a new ansible.cfg file for your automation
 
 Creating an ansible configuration file is the first step that a new operator should perform when getting started.
-By default, there is a vast array of options and configuration knobs which are active in Ansible, way too many to cover in the course of this lab. That said, to get a sneak preview of what the defaults look like, you can execute the command:
+By default, there is a vast array of options and configuration knobs which are active in Ansible, way too many to cover in the course of this lab.
+That said, to get a sneak preview of what the defaults look like, you can execute the command:
+
+```code
 ansible-config init --disabled > ansible.full_config
+```
+
 This command will generate a complete configuration for Ansible, including all the default parameters.
 To get an idea of what this default configuration looks like, you can execute the command:
+
+```code
 cat ansible.full_config | head
+```
+
 Which will print the first lines of the created default configuration:
 
 ```yml
@@ -70,10 +81,10 @@ Which will print the first lines of the created default configuration:
 
 # (string) Specify a custom cowsay path or swap in your cowsay implementation of choice
 ;cowpath=
-
-Since there are way more parameters in the full default configuration file than will be needed for the purpose of this lab, the above information is only informational. 
-We will create a much more simplistic configuration for the purpose of our exercise. 
 ```
+
+Since there are way more parameters in the full default configuration file than will be needed for the purpose of this lab, the above information is only informational.
+We will create a much more simplistic configuration for the purpose of our exercise.
 
 ### Configuration selection order
 
@@ -121,18 +132,31 @@ become_method=sudo
 ```
 
 The configuration added defines a number of actions:
+
 [defaults]  is the expected and initial section for the configuration file, within this section we are defining the inventory location, which will provide the list for hosts which will be communicated with for the execution of ansible playbooks.
+
 [privilege_escalation] is used for scenarios where system tasks may be executed on a remote unix host, often the use of su or sudo may be used for operations such as processes to be restarted or new packages to be installed.
 
-For our purposes today, this is the extent of the configuration which we will adding into the ansible.cfg file.  Once the above content has been added, save the file and close it.
-Once in the Ansible-Lab directory, you should now be able to see the change in prioritization for the ansible.cfg file, by once again executing the ansible –-version command.
+For our purposes today, this is the extent of the configuration which we will adding into the ansible.cfg file.
+Once the above content has been added, save the file and close it.
+Once in the Ansible-Lab directory, you should now be able to see the change in prioritization for the ansible.cfg file, by once again executing
+
+```code
+ansible –-version
+```
+
 Now upon executing that command the outputs should no longer point to the former location of /etc/ansible/ansible.cfg but rather to the new file which you created in the Ansible-Lab directory:
 
 ```code
-ansible --version | grep cfg
-/home/dcloud/.local/lib/python3.8/site-packages/paramiko/transport.py:219: CryptographyDeprecationWarning: Blowfish has been deprecated
-  "class": algorithms.Blowfish,
-  config file = /home/dcloud/Ansible-Lab/ansible.cfg
+ansible [core 2.13.7]
+  config file = /home/lab/Ansible-Lab/ansible.cfg
+  configured module search path = ['/home/lab/.ansible/plugins/modules', '/usr/share/ansible/plugins/modules']
+  ansible python module location = /home/lab/.local/lib/python3.8/site-packages/ansible
+  ansible collection location = /home/lab/.ansible/collections:/usr/share/ansible/collections
+  executable location = /home/lab/.local/bin/ansible
+  python version = 3.8.10 (default, Nov 14 2022, 12:59:47) [GCC 9.4.0]
+  jinja version = 3.1.2
+  libyaml = True
 ```
 
 ## Step 3: Creating your Inventory
@@ -162,6 +186,10 @@ As we want to better understand the power of Ansible, we are going to take a sli
 Within the same directory that you placed your ansible.cfg file, please create a file called inventory using your favorite text editor. Within this file we are going to create location headings which match up with the Cisco Live Locations for 2023, closing the location definition within [ square brackets ].  
 Within those location headings we will populate the nodes which we will be working with through the course of this lab.
 
+```code
+vim inventory
+```
+
 ``` yml
 #format INI
 
@@ -188,7 +216,7 @@ Melbourne
 Once the file has been completed, close and save the file, checking that the file has been properly created by using the below command:
 
 ```code
-cat /home/dcloud/Ansible-Lab/inventory
+cat /home/lab/Ansible-Lab/inventory
 ```
 
 To further confirm that Ansible recognizes the inventory is present, you can use the command:
@@ -197,13 +225,41 @@ To further confirm that Ansible recognizes the inventory is present, you can use
 ansible-inventory --list -y
 ```
 
-The result of this command should show you the list which you just created in INI format. Now one thing which you may be thinking is that the formatting is different.
-The reason for the change in formatting is that the -y flag prints the inventory our in YAML format for you. This can be helpful for you when trying to become more familiar with the syntax usage with YAML.
+```code
+ansible-inventory --list -y
+all:
+  children:
+    CiscoLive:
+      children:
+        Amsterdam:
+          hosts:
+            198.18.3.106: {}
+        LasVegas:
+          hosts:
+            198.18.3.100: {}
+            198.18.3.101: {}
+        Melbourne:
+          hosts:
+            198.18.3.104: {}
+            198.18.3.105: {}
+    RiodeJaneiro:
+      hosts:
+        198.18.1.10: {}
+    ungrouped: {}
+```
+
+The result of this command should show you the list which you just created in INI format.
+Now one thing which you may be thinking is that the formatting is different.
+The reason for the change in formatting is that the -y flag prints the inventory our in YAML format for you.
+This can be helpful for you when trying to become more familiar with the syntax usage with YAML.
 One further action that can be performed to confirm if ansible is reading the inventory correctly, is the ability to search for a specific host, this is particularly useful in large environments, where ansible may be managing 1000s of systems.
 To search for a specific node in the inventory the below syntax can be used:
 
 ```code
  ansible 198.18.3.106 --list-hosts
+ ```
+
+ ```code
   hosts (1):
     198.18.3.106
 ```
@@ -219,9 +275,12 @@ In this exercise we are going to explore the different methods that variables ca
 
 In the previous section the method which was used or variable assignment allows for the operator to control a broad range of variables that may be specific to a specific host.
 Directly next to the host the variables which are desired for that host should be populated in.
-As we just observed, we only have three variables which we intend to deploy, which isn’t a significant amount. Therefore we are going to look at other options to allocate these parameters fo your systems, one of which is inline variable allocation within your inventory file itself.
+As we just observed, we only have three variables which we intend to deploy, which isn’t a significant amount.
+Therefore we are going to look at other options to allocate these parameters fo your systems, one of which is inline variable allocation within your inventory file itself.
 For this part of the configuration we are going to be focusing on DC-EDGE2 (198.18.3.101).
-Using your favorite editor, open up the inventory file again. This time editing the line where DC-EDGE2 is located, before the # symbol
+Using your favorite editor, open up the inventory file again.
+This time editing the line where DC-EDGE2 is located, before the # symbol
+
 IMPORTANT!! Please note, that although the example below shows multiple lines being used, this is wordwrapped, do not press carriage return when entering variables, all content must remain on the one line.
 
 ```yml
@@ -234,7 +293,9 @@ IMPORTANT!! Please note, that although the example below shows multiple lines be
 
 ### Group Based Variables in Inventory
 
-The former two methods which were showcased were very host, making use of the inline configuration in the inventory and the host_vars configurations. If however you have common parameters which should be used for numerous hosts at once, you can vastly simplify the applied variables by allocating them directly to a group in the inventory.
+The former two methods which were showcased were very host specifc, making use of the inline configuration in the inventory and the host_vars configurations.
+If however you have common parameters which should be used for numerous hosts at once, you can vastly simplify the applied variables by allocating them directly to a group in the inventory.
+
 Using your editor, open up the inventory file again, and add the following content to the bottom of the file:
 
 ```yml
@@ -252,14 +313,14 @@ Sometimes in Ansible you want to do some basic verifications without the need to
 Using the syntax below, walk through your inventory sections and attempt execution of a single CLI command:
 
 ```code
-ansible LasVegas --limit 198.18.3.100 -m raw -a 'show ver | i Cisco IOS Software'
+ansible LasVegas --limit 198.18.3.101 -m raw -a 'show ver | i Cisco IOS Software'
 ```
 
-In the above example, we are choosing to select hosts from the inventory file under the section [LasVegas] whilst limiting the selection of hosts to a single device “198.18.3.100”.
+In the above example, we are choosing to select hosts from the inventory file under the section [LasVegas] whilst limiting the selection of hosts to a single device “198.18.3.101”.
 The execution is leveraging one of the bulit-in modules from ansible called ‘raw’, this module provides limited feedback and error checking, hence usually more useful for interaction with embedded systems.
 
 ```code
-198.18.3.100 | CHANGED | rc=0 >>
+198.18.3.101 | CHANGED | rc=0 >>
 Restricted Use
 Cisco IOS Software [Cupertino], Virtual XE Software (X86_64_LINUX_IOSD-UNIVERSALK9-M), Version 17.9.2a, RELEASE SOFTWARE (fc4)
 Un authorised Logins trackedShared connection to 198.18.3.100 closed.
@@ -270,7 +331,7 @@ Un authorised Logins trackedShared connection to 198.18.3.100 closed.
 Make sure that you are in your Ansible-Lab root directory (the directory which has your ansible.cfg file):
 
 ```code
-cd /home/dcloud/Ansible-Lab/
+cd /home/lab/Ansible-Lab/
 ```
 
 ### Create Directory Structure For Playbooks
@@ -279,7 +340,14 @@ From this location, go ahead and create a new directory called tasks
 After creating the new directory, navigate into that portion of the hierarchy and create a new file called cedge_verify.yml :
 
 ```code
-cd /home/dcloud/Ansible-Lab/tasks/
+mkdir tasks
+```
+
+```code
+cd /home/lab/Ansible-Lab/tasks/
+```
+
+```code
 touch cedge_verify.yml
 ```
 
@@ -289,6 +357,10 @@ The tasks directory which you just created is where we are going to place your p
 Using an editor open up the cedge_verify.yml file which you created in the tasks directory and add the below content into the file.
 YAML format has a strict requirement in terms of hierarchy and spacing, so please be mindful of the indentations when adding the content:
 
+```code
+vim cedge_verify.yml
+```
+
 ```yml
 - name: C-Edge Verifications
   hosts: CiscoLive
@@ -297,6 +369,10 @@ YAML format has a strict requirement in terms of hierarchy and spacing, so pleas
 ```
 
 After configuring the playbook file, go back to your Ansible-Lab directory and execute the below command:
+
+```code
+cd ..
+```
 
 ```code
 ansible-playbook tasks/cedge_verify.yml
@@ -320,8 +396,20 @@ Open up the existing cedge_verify.yml file and under the existing content, add a
 Looking below you can see that individual plays are listed:
 tasks:
 
+```code
+vim cedge_verify.yml
+```
+
 ```yml
-    - name: Gathering IOS Facts
+---
+- name: Show Examples
+  hosts: CiscoLive
+  connection: network_cli
+  gather_facts: no
+
+  tasks:
+
+    - name: GATHERING FACTS
       ios_facts:
         gather_subset: min
 
@@ -330,7 +418,7 @@ tasks:
         commands: show sdwan control connections
       register: sdwanctlcon
 
-    - name: display Control Connections
+    - name: display Connections
       debug:
         var: sdwanctlcon["stdout_lines"][0]
 
