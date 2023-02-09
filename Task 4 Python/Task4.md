@@ -467,7 +467,7 @@ if __name__ == '__main__':
 
     Auth = Authentication()
     jsessionid = Auth.get_jsessionid(vmanage_host,vmanage_port,vmanage_username,vmanage_password)
-        token = Auth.get_token(vmanage_host,vmanage_port,jsessionid)
+    token = Auth.get_token(vmanage_host,vmanage_port,jsessionid)
     
     if token is not None:
         header = {'Content-Type': "application/json",'Cookie': jsessionid, 'X-XSRF-TOKEN': token}
