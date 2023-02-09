@@ -396,21 +396,19 @@ Now, time to start doing more elaborate steps by adding your first play.
 
 ### Adding your first Plays
 
-Open up the existing cedge_verify.yml file and under the existing content, add a new section called tasks:  this is where we configure our different routines which are referred to as plays.
-Looking below you can see that individual plays are listed:
-tasks:
+Open up the existing cedge_verify.yml file and under the existing content, APPEND a new section called tasks:  
+This is where we configure our different routines which are referred to as plays.
+Looking below you can see that individual plays are listed: tasks:
+
+```code
+cd tasks
+```
 
 ```code
 vim cedge_verify.yml
 ```
 
 ```yml
----
-- name: Show Examples
-  hosts: CiscoLive
-  connection: network_cli
-  gather_facts: no
-
   tasks:
 
     - name: GATHERING FACTS
@@ -438,6 +436,14 @@ vim cedge_verify.yml
 
 After saving the above configurations, it is time to go ahead and execute your playbook again.
 This time, with the added tasks present, you should observe a more extensive output, sharing the results of the commands which were executed on each system.
+
+```code
+cd ..
+```
+
+```code
+ansible-playbook tasks/cedge_verify.yml
+```
 
 ![postman](/images/an.png)
 
