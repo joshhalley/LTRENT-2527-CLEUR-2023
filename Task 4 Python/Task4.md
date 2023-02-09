@@ -2165,3 +2165,5 @@ python3 vmanage_apis.py attached-devices --template 9ae531dd-beac-4b21-be95-99ab
 │ DC-EDGE1    │ 10.1.0.1    │       100 │ C8K-E75016E7-317F-9987-525B-11816F7A3155 │ vedge       │
 ╘═════════════╧═════════════╧═══════════╧══════════════════════════════════════════╧═════════════╛
 ```
+
+* [Main Menu](/README.md/#table-of-content)

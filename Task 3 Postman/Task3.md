@@ -20,13 +20,13 @@ A Postman environment is a list of variables that can be used to easily switch b
 
 A Postman collection is a group of API calls that define endpoints or resources that are available for that specific API. The collection also includes other parameters, headers, or authentication methods that are needed to successfully complete the call.
 
-Login to the windows machine using RDP and launch the Postman Application
+Login to the windows machine using RDP IP and Credentials in the Main Page and launch the Postman Application
 
 Before running any exercise, verify that your Postman configuration has SSL certificate verification disabled
 
 ![postman](/images/pm-1.png)
 
-A sample Postman Collection and a set of environment variables are already created to save time
+```A sample Postman Collection and a set of environment variables are already created to save time```
 
 ![postman](/images/pm-2.png)
 
@@ -39,8 +39,7 @@ The first step in interacting with an API is usually authentication. Authenticat
 In your Cisco-SD-WAN collection, you can see that the first API call that you have is called Authentication and is in a folder named Authentication.
 
 The Authentication call is a POST call.
-
- To define the endpoint for the authentication call, you use the environment variable {{vmanage}}. These values will be replaced with the ones you have defined in the environment variables
+To define the endpoint for the authentication call, you use the environment variable {{vmanage}}. These values will be replaced with the ones you have defined in the environment variables
 
 The resource that you are sending the API call to is j_security_check.
 
@@ -144,4 +143,6 @@ At the top of the code snippet, the requests library is imported, after which va
 The response variable contains the response of the POST request and at the end, the text method of the response object is displayed to the user.
 You can do the same for all the other calls you explored in this Lab and obtain the Python code for them. You can then combine them in scripts and applications for automation and network programmability purposes
 
-``` Explore the other calls in the collection at your leisure```
+```Explore the other calls in the collection at your leisure```
+
+* [Main Menu](/README.md/#table-of-content)

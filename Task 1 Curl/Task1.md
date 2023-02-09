@@ -93,3 +93,5 @@ curl --insecure \
      --cookie cookie.txt \
      | python -m json.tool
 ```
+
+* [Main Menu](/README.md/#table-of-content)

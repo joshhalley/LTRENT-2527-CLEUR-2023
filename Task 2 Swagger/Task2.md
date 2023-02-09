@@ -63,3 +63,5 @@ Administration > Manage users > User Groups
 ![postman](/images/sw8.png)
 
 ```Take some time and explore more GET calls and observe the request body and results```
+
+* [Main Menu](/README.md/#table-of-content)

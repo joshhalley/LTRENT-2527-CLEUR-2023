@@ -445,3 +445,5 @@ Looking above – we can see a mix of failed and successful sessions.
 For the sessions which have failed, the credentials and the network operating system was missing.
 Please go ahead and edit the inventory file to actualize these parameters and run the playbook again.
 With that task complete, we have concluded the section of using Ansible for IOS-XE CLI interaction. Feel free to adjust the plays present to match up with further commands which may be relevant to your operational landscape and test them out.
+
+* [Main Menu](/README.md/#table-of-content)

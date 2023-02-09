@@ -163,3 +163,5 @@ task path: /home/dcloud/Ansible-Lab/tasks/vManage_ft_facts.yml:6
 [WARNING]: Module did not set no_log for password
 ok: [localhost] => {"changed": false, "feature_templates": [{"attachedMastersCount": 1, "configType": "xml", "createdBy": "admin", "createdOn": 1669643778965, "deviceType": ["vedge-C8000V"], "devicesAttached": 2, "factoryDefault": false, "lastUpdatedBy": "admin", "lastUpdatedOn": 1669653516653, "resourceGroup": "global", "templateDefinition": {
 ```
+
+* [Main Menu](/README.md/#table-of-content)
