@@ -257,7 +257,7 @@ Modify the code as below if you want to see the full response
     print(url)
     response = requests.get(url=url, headers=headers,verify=False)
     items = response.json()['data']
-    **print(items)**
+    print(items)
     for device in items:
         print(f"Device controller => {device['deviceType']} with IP address {device['deviceIP']}")
 ```
@@ -269,7 +269,7 @@ Modify the code as below if you want to see the full response in pretty format
     print(url)
     response = requests.get(url=url, headers=headers,verify=False)
     items = response.json()['data']
-    **print(json.dumps(items, indent=4))**
+    print(json.dumps(items, indent=4))
     for device in items:
         print(f"Device controller => {device['deviceType']} with IP address {device['deviceIP']}")
 ```
@@ -460,10 +460,8 @@ if __name__ == '__main__':
 
     Auth = Authentication()
     jsessionid = Auth.get_jsessionid(vmanage_host,vmanage_port,vmanage_username,vmanage_password)
-    print(jsessionid)
-    token = Auth.get_token(vmanage_host,vmanage_port,jsessionid)
-    print(token)
-
+        token = Auth.get_token(vmanage_host,vmanage_port,jsessionid)
+    
     if token is not None:
         header = {'Content-Type': "application/json",'Cookie': jsessionid, 'X-XSRF-TOKEN': token}
     else:
@@ -573,6 +571,59 @@ cli.add_command(variable_list)
 
 if __name__ == "__main__":
     cli()
+```
+
+Observe the help options given for the application
+
+```code
+python get-device-template-variable-list.py --help
+
+Usage: get-device-template-variable-list.py [OPTIONS] COMMAND [ARGS]...
+
+  Command line tool for deploying templates to CISCO SDWAN.
+
+Options:
+  --help  Show this message and exit.
+
+Commands:
+  device-list    Retrieve and return network devices list.
+  template-list  Retrieve and return templates list.
+  variable-list  Get variable list for a device template.
+
+python get-device-template-variable-list.py device-list --help
+Usage: get-device-template-variable-list.py device-list [OPTIONS]
+
+  Retrieve and return network devices list. Returns information about each
+  device that is part of the fabric. Example command:     ./get-device-
+  template-vairable-list.py device_list
+
+Options:
+  --help  Show this message and exit.
+
+python get-device-template-variable-list.py template-list --help
+Usage: get-device-template-variable-list.py template-list [OPTIONS]
+
+  Retrieve and return templates list. Returns the templates available on the
+  vManage instance. Example command:     ./get-device-template-vairable-
+  list.py template_list
+
+Options:
+  --help  Show this message and exit.
+
+
+python get-device-template-variable-list.py variable-list --help
+
+Usage: get-device-template-variable-list.py variable-list [OPTIONS]
+
+  Get variable list for a device template. Provide template id and edge id as
+  arguments. Example command:   ./get-device-template-vairable-list.py
+  variable_list --template_id TemplateID --edge_id EdgeID
+
+Options:
+  --template_id TEXT  ID of the template
+  --edge_id TEXT      Edge ID
+  --help              Show this message and exit.
+
 ```
 
 ```code
@@ -695,13 +746,17 @@ Attempting to get variable for a device template.
 
 ### Change device hostname
 
-Using the outputs from the previous call, we have the below script which is used to modify any variables for this device.
+The below script is to attach a template to a device or modify the variable values.
+The script payload is prepared using the outputs from the previous call (variable-list)
 To demonstrate we will modify the hostname of the BR2-EDGE11 to BR2-EDGE-TEST
-Observe the payload format for this request. The sample can be taken from the APIDOCS (swagger)
+Observe the payload format for this request.
+The sample can be taken from the APIDOCS (swagger)
 
 ```Changing hostname to BR2-EDGE1-TEST```
 
+```code
 vim modify-device-variable.py
+```
 
 ```python
 #! /usr/bin/env python
@@ -813,14 +868,47 @@ response = requests.post(url=url, data=payload, headers=headers, verify=False)
 print(response)
 ```
 
+Exeute the script to change the hostname
+
 ```code
-Run the get variable script to confirm the hostname
+python  modify-device-variable.py
+```
+
+```code
+JSESSIONID=eL1_BvH83UJ-0A3aZe8XULhLB-_dUjCmp2zMllBI.f781faf4-cf63-4f7c-9f80-b63169da9c7b
+26DAF85DEF83199E48B41F14E38C232F31E8F47458D2E3FD6378398FAA3638187C85615F65375644C8E028FCA2D779E07C16
+https://198.18.1.10:443/dataservice/template/device/config/attachfeature
+<Response [200]>
+```
+
+```Run the get variable script to confirm the hostname```
+
+```code
+ python get-device-template-variable-list.py variable-list --template_id d6231e3c-3613-499c-aabc-57c66999e38d --edge_id C8K-6CA314A2-44A1-A49C-8E10-C36096E78608
+ ```
+
+```code
+Attempting to get variable for a device template.
+<Response [200]>
+[
+    {
+        "csv-status": "complete",
+        "csv-deviceId": "C8K-6CA314A2-44A1-A49C-8E10-C36096E78608",
+        "csv-deviceIP": "10.4.0.1",
+        "csv-host-name": "BR2-EDGE1",
+        "//system/host-name": "BR2-EDGE1-TEST",
+        "//system/system-ip": "10.4.0.1",
+        "//system/site-id": "400",
+        "/10/vpn-instance/ip/route/vpn10_static_route1_ip_prefix/prefix": "10.4.11.0/24",
+        "/10/vpn-instance/ip/route/vpn10_static_route1_ip_prefix/next-hop/vpn10_static_route1_next_hop/address": "10.4.10.65"
+    }
+]
 ```
 
 ### Add vMange Usergroup
 
 ```code
-vim post_sdwan_add_group
+vim post_sdwan_add_group.py
 ```
 
 ```python
@@ -1032,6 +1120,8 @@ python3 post_sdwan_add_usr.py
 <Response [200]>
 ```
 
+```Login to vManage and confirm the creation of the Group and User.```
+
 ## Step 4: SDWAN Policies with Python
 
 The below scripts again uses click to create the CLI component of the application.
@@ -1110,9 +1200,7 @@ if __name__ == '__main__':
 
     Auth = Authentication()
     jsessionid = Auth.get_jsessionid(vmanage_host,vmanage_port,vmanage_username,vmanage_password)
-    print(jsessionid)
     token = Auth.get_token(vmanage_host,vmanage_port,jsessionid)
-    print(token)
 
     if token is not None:
         header = {'Content-Type': "application/json",'Cookie': jsessionid, 'X-XSRF-TOKEN': token}
@@ -1263,6 +1351,55 @@ cli.add_command(deactivate_policy)
 
 if __name__ == "__main__":
     cli()
+```
+
+```Explore the help for this applicaton```
+
+```code
+python3 policy-list-activate-deactivate.py --help
+Usage: policy-list-activate-deactivate.py [OPTIONS] COMMAND [ARGS]...
+
+  Command line tool for vManage Templates and Policy Configuration APIs.
+
+Options:
+  --help  Show this message and exit.
+
+Commands:
+  activate-policy    Activate centralized policy.
+  deactivate-policy  Deactivate centralized policy.
+  policy-list        Retrieve and return centralized policies list.
+
+python3 policy-list-activate-deactivate.py  policy-list --help
+Usage: policy-list-activate-deactivate.py policy-list [OPTIONS]
+
+  Retrieve and return centralized policies list.
+  Example command: ./policy-list-activate-deactivate.py policy-list
+
+Options:
+  --help  Show this message and exit.
+
+python3 policy-list-activate-deactivate.py activate-policy --help
+Usage: policy-list-activate-deactivate.py activate-policy [OPTIONS]
+
+  Activate centralized policy.                                        Example
+  command: ./policy-list-activate-deactivate.py activate-policy --name
+  MultiTopologyPlusAppRoute
+
+Options:
+  --name TEXT  Name of the policy
+  --help       Show this message and exit.
+
+python3 policy-list-activate-deactivate.py deactivate-policy --help
+Usage: policy-list-activate-deactivate.py deactivate-policy
+           [OPTIONS]
+
+  Deactivate centralized policy.
+  Example command: ./policy-list-activate-deactivate.py deactivate-policy
+  --name MultiTopologyPlusAppRoute
+
+Options:
+  --name TEXT  Name of the policy
+  --help       Show this message and exit.
 ```
 
 ### Get Policy List
@@ -1438,14 +1575,12 @@ if __name__ == '__main__':
 
     Auth = Authentication()
     jsessionid = Auth.get_jsessionid(vmanage_host,vmanage_port,vmanage_username,vmanage_password)
-    print(jsessionid)
     token = Auth.get_token(vmanage_host,vmanage_port,jsessionid)
-    print(token)
 
     if token is not None:
-        headers = {'Content-Type': "application/json",'Cookie': jsessionid, 'X-XSRF-TOKEN': token}
+        header = {'Content-Type': "application/json",'Cookie': jsessionid, 'X-XSRF-TOKEN': token}
     else:
-        headers = {'Content-Type': "application/json",'Cookie': jsessionid}
+        header = {'Content-Type': "application/json",'Cookie': jsessionid}
 
     # base dataservice URL
     base_url = "https://%s:%s/dataservice"%(vmanage_host,vmanage_port)
