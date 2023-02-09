@@ -408,6 +408,8 @@ cd tasks
 vim cedge_verify.yml
 ```
 
+```Ensure the paste the below from the start of a new line to maintain the indentation```
+
 ```yml
   tasks:
 
