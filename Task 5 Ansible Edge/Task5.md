@@ -298,6 +298,10 @@ If however you have common parameters which should be used for numerous hosts at
 
 Using your editor, open up the inventory file again, and add the following content to the bottom of the file:
 
+```code
+vim inventory
+```
+
 ```yml
 [Melbourne:vars]
 ansible_user=admin

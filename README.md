@@ -78,7 +78,7 @@ Copy the below packages
 ```code
 ansible==6.7.0
 ansible-core==2.13.7
-ansible-pylibssh
+ansible-pylibssh==1.1.0
 certifi==2019.3.9
 chardet==3.0.4
 click==8.1.3
@@ -92,12 +92,12 @@ Jinja2==3.1.2
 MarkupSafe==2.1.2
 napalm==4.0.0
 ncclient==0.6.13
-netmiko==3.4.0
+netmiko==4.1.2
 nornir==3.3.0
 nornir-ansible==2022.7.30
 nornir-jinja2==0.2.0
 nornir-napalm==0.3.0
-nornir-netmiko==0.1.2
+nornir-netmiko==0.2.0
 nornir-scrapli==2021.7.30
 nornir-utils==0.2.0
 numpy==1.19.0
@@ -115,6 +115,7 @@ urllib3==1.24.3
 Werkzeug==2.2.2
 xmltodict==0.13.0
 json2html==1.3.0
+viptela==0.3.9
 ```
 
 Run the following command

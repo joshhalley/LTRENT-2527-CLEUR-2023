@@ -26,8 +26,10 @@ In this section we are going to be using the programming logic and frameworks wh
 To retrive this project, in your Ansible-Lab directory execute the following command:
 
 ```code
-git clone 
-https://github.com/CiscoDevNet/python-viptela
+git clone https://github.com/CiscoDevNet/python-viptela
+```
+
+```code
 Executing the above command will download the code repository and create a new directory with its contents.
 Cloning into 'python-viptela'...
 remote: Enumerating objects: 2093, done.
@@ -42,6 +44,9 @@ Cloned repository which was downloaded:
 
 ```code
 ls -tlr
+```
+
+```code
 total 16
 -rw-rw-r-- 1 dcloud dcloud  114 Jan 29 18:13 ansible.cfg
 drwxrwxr-x 2 dcloud dcloud 4096 Jan 30 10:54 tasks
@@ -51,19 +56,17 @@ drwxrwxr-x 9 dcloud dcloud 4096 Jan 30 11:38 python-viptela
 
 ### Instructing Ansible to use custom Modules
 
-To allow for the new modules which are part of the cloned repository to be used, some further lines need to be added into the existing ansible.cfg file which is located in the Ansible-Lab directory (the new additions being highlighted in Yellow):
+To allow for the new modules which are part of the cloned repository to be used, some further lines need to be added into the existing ansible.cfg file which is located in the Ansible-Lab directory (the new additions under the [defaults] setion):
+
+```code
+vim ansible.cfg
+```
 
 ```yml
-[defaults]
-inventory: ./inventory
-host_key_checking=False
-library = python-viptella/ansible/modules
-module_utils = python-viptella/ansible/module_utils
-remote_tmp = /home/dcloud/Ansible-Lab/tmp
+library = python-viptela/ansible/modules
+module_utils = python-viptela/ansible/module_utils
+remote_tmp = /home/lab/Ansible-Lab/tmp
 
-[privilege_escalation]
-become=False
-become_method=sudo
 ```
 
 Once adding the content, save the file again, and we can move onto the next step of preparing the inventory for vManage.
@@ -77,18 +80,12 @@ To allow for this host to be communicated with, we will need to populate the inv
 ### vManage Variables
 
 Opening up the inventory file, please proceed in adding a new section called [RiodeJaneiro:vars] .
-The end output should look like what we have below with the new additions highlighted in Yellow:
 
 ```code
-cat inventory
+vim inventory
 ```
 
 ```yml
-#format INI
-
-[RiodeJaneiro]
-198.18.1.10
-<SNIP – REDACTED FOR BREVITY>
 [RiodeJaneiro:vars]
 ansible_user = admin
 ansible_password = C1sco12345
@@ -99,6 +96,14 @@ vmanage_ip = 198.18.1.10
 
 Now that the inventory has been updated with the requisite credentials, and the ansible.cfg file is pointing to the modules which we need for interacting with vManage. We can begin creation of the playbook.
 Once again, in the tasks directory, create a file this time called vManage_ft_facts.yml populating the file with the following content:
+
+```code
+cd tasks
+```
+
+```code
+vim vManage_ft_facts.yml
+```
 
 ```yml
 ---
