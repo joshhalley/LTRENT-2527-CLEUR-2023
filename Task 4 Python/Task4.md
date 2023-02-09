@@ -30,7 +30,7 @@ oget_jsessionid
 oget_token
 
 ```code
-cat vmanage_auth.py 
+vim vmanage_auth.py 
 ```
 
 ```python
@@ -144,7 +144,7 @@ Below script uses the authentication class and then at the end run a GET for con
 It now iterates over each device in the items with a for loop and extract data for the devicetype and deviceIP. After this display the data as specified in the print statement
 
 ```code
-cat get_sdwan_controller_1.py 
+vim get_sdwan_controller_1.py 
 ```
 
 ```python
@@ -269,7 +269,7 @@ Modify the code as below if you want to see the full response in pretty format
 ### GET Edge List
 
 ```code
-cat get_sdwan_edges_1.py
+vim get_sdwan_edges_1.py
 ```
 
 ```python
@@ -383,7 +383,7 @@ It extracts just the [data] portion of the JSON and store it in a variable calle
 It now iterates over each item in the items with a for loop and extract data for the hostname, device-type, uuid, system-ip, site-id, version, and device-model of each device. After this uses tabulate to display the data
 
 ```code
-cat get-device-template-variable-list.py 
+vim get-device-template-variable-list.py 
 ```
 
 ```python
@@ -800,7 +800,7 @@ Run the get variable script to confirm the hostname
 ### Add vMange Usergroup
 
 ```code
-cat post_sdwan_add_group
+vim post_sdwan_add_group
 ```
 
 ```python
@@ -907,7 +907,7 @@ python3 post_sdwan_add_group.py
 ### Add vManage User
 
 ```code
-cat post_sdwan_add_usr.py
+vim post_sdwan_add_usr.py
 ```
 
 ```python
@@ -1018,7 +1018,7 @@ We have 3 options defined
 The code again use the same authentication class to get the JSESSION ID and Token and then defined the above methods separately
 
 ```code
-cat policy-list-activate-deactivate.py 
+vim policy-list-activate-deactivate.py 
 ```
 
 ```python
@@ -1331,7 +1331,7 @@ Retrieving the Centralized Policies available.
 Create another CLI Application with more functions like the created above for template and device list
 
 ```code
-cat vmanage_apis.py
+vim vmanage_apis.py
 ```
 
 ```python
