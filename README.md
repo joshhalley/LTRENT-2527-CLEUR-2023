@@ -45,6 +45,8 @@ The forthcoming programmability tasks outlined in this lab shall use a mix of op
 
 ## Task 0: Setup the Ubuntu Environment
 
+Login to the Ubuntu Matchine, IP and Credentials above.
+
 Install all the needed linux packages for establishing SD-WAN network automation environment.
 
 ```code
