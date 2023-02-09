@@ -127,8 +127,13 @@ export vManage_IP=198.18.1.10
 export vManage_PORT=443
 export vManage_USERNAME=admin
 export vManage_PASSWORD=C1sco12345
+```
 
+```code
 python3 vmanage_auth.py 
+```
+
+```code
 JSESSIONID=I5Jw-qCdy5nqxcsKZCadZSda-QytelBbGqY6lQFu.f781faf4-cf63-4f7c-9f80-b63169da9c7b
 1AB84846F363D8849BCA647558FC89ACA8C4F835B3456BF8935B44DF08258C27EBB6EA8960E865B6EFCD851BD00DBDFAF449
 dcloud@ubuntu:~/lab/final_scripts$
@@ -234,7 +239,10 @@ if __name__ == '__main__':
 ```
 
 ```code
-python3 get_sdwan_controller_1.py 
+python3 get_sdwan_controller_1.py
+```
+
+```code
 https://198.18.1.10:443/dataservice/system/device/controllers
 Device controller => vmanage with IP address 10.10.10.10
 Device controller => vsmart with IP address 12.12.12.12
@@ -249,7 +257,7 @@ Modify the code as below if you want to see the full response
     print(url)
     response = requests.get(url=url, headers=headers,verify=False)
     items = response.json()['data']
-    print(items)
+    **print(items)**
     for device in items:
         print(f"Device controller => {device['deviceType']} with IP address {device['deviceIP']}")
 ```
@@ -261,7 +269,7 @@ Modify the code as below if you want to see the full response in pretty format
     print(url)
     response = requests.get(url=url, headers=headers,verify=False)
     items = response.json()['data']
-    print(json.dumps(items, indent=4))
+    **print(json.dumps(items, indent=4))**
     for device in items:
         print(f"Device controller => {device['deviceType']} with IP address {device['deviceIP']}")
 ```
@@ -360,6 +368,9 @@ if __name__ == '__main__':
 
 ```code
 python3 get_sdwan_edges_1.py 
+```
+
+```code
 https://198.18.1.10:443/dataservice/system/device/vedges
 vEdge device => vedge-C8000V with serialnumber 5BA2D66C
 vEdge device => vedge-C8000V with serialnumber 75E93603
@@ -565,7 +576,10 @@ if __name__ == "__main__":
 ```
 
 ```code
-python3 get-device-template-list.py device-list
+python get-device-template-variable-list.py device-list
+```
+
+```code
 Retrieving the devices.
 ╒═════════════╤═══════════════╤══════════════════════════════════════════╤═════════════╤═══════════╤═══════════════╤════════════════╕
 │ Host-Name   │ Device Type   │ Device ID                                │ System IP   │   Site ID │ Version       │ Device Model   │
@@ -591,7 +605,10 @@ Retrieving the devices.
 ```
 
 ```code
-python3 get-device-template-list.py template-list
+python3 get-device-template-variable-list.py template-list
+```
+
+```code
 Retrieving the templates available.
 ╒═════════════════════════════════════════════════════╤═════════════════════╤══════════════════════════════════════╤════════════════════╤════════════════════╕
 │ Template Name                                       │ Device Type         │ Template ID                          │   Attached devices │   Template version │
@@ -646,7 +663,10 @@ In the below example we have taken the template and edge id value from the previ
 * edge id ```C8K-6CA314A2-44A1-A49C-8E10-C36096E78608``` which is named as ```BR2-EDGE1```
 
 ```code
-python get-device-template-vairable-list.py variable-list --template_id d6231e3c-3613-499c-aabc-57c66999e38d --edge_id C8K-6CA314A2-44A1-A49C-8E10-C36096E78608
+python get-device-template-variable-list.py variable-list --template_id d6231e3c-3613-499c-aabc-57c66999e38d --edge_id C8K-6CA314A2-44A1-A49C-8E10-C36096E78608
+```
+
+```code
 JSESSIONID=f69jJ_O0vfiahp2WrJL9tI7Hc6f3uT95XeZZ1d-x.f781faf4-cf63-4f7c-9f80-b63169da9c7b
 60BD61E1D1872015AD140F972BDA5282B7117FB79E5306E2010765703506F92A246E8245EFE8EA646FADDC0FD4E3637C3B86
 Attempting to get variable for a device template.
@@ -681,7 +701,7 @@ Observe the payload format for this request. The sample can be taken from the AP
 
 ```Changing hostname to BR2-EDGE1-TEST```
 
-modify-device-variable.py
+vim modify-device-variable.py
 
 ```python
 #! /usr/bin/env python
@@ -901,6 +921,9 @@ if __name__ == '__main__':
 
 ```code
 python3 post_sdwan_add_group.py 
+```
+
+```code
 <Response [200]>
 ```
 
@@ -1003,6 +1026,9 @@ if __name__ == '__main__':
 
 ```code
 python3 post_sdwan_add_usr.py 
+```
+
+```code
 <Response [200]>
 ```
 
@@ -1243,6 +1269,9 @@ if __name__ == "__main__":
 
 ```code
 python3 policy-list-activate-deactivate.py policy-list
+```
+
+```code
 Retrieving the Centralized Policies available.
 ╒══════════════════════════════╤═══════════════╤══════════════════════════════════════╤═══════════════════╕
 │ Policy Name                  │ Policy Type   │ Policy ID                            │ Active/Inactive   │
@@ -1267,6 +1296,9 @@ Retrieving the Centralized Policies available.
 
 ```code
 python3 policy-list-activate-deactivate.py activate-policy --name MultiTopologyPolicy
+```
+
+```code
 Policy UUID for MultiTopologyPolicy is 6ff80e3c-a8e8-4fbf-9b55-32568093440c
 
 Successfully activated vSmart Policy MultiTopologyPolicy
@@ -1274,6 +1306,9 @@ Successfully activated vSmart Policy MultiTopologyPolicy
 
 ```code
 python3 policy-list-activate-deactivate.py policy-list
+```
+
+```code
 Retrieving the Centralized Policies available.
 ╒══════════════════════════════╤═══════════════╤══════════════════════════════════════╤═══════════════════╕
 │ Policy Name                  │ Policy Type   │ Policy ID                            │ Active/Inactive   │
@@ -1299,13 +1334,19 @@ Retrieving the Centralized Policies available.
 
 ```code
 python3 policy-list-activate-deactivate.py deactivate-policy --name MultiTopologyPolicy
+```
+
+```code
 Policy UUID for MultiTopologyPolicy is 6ff80e3c-a8e8-4fbf-9b55-32568093440c
 
 Successfully deactivated vSmart Policy MultiTopologyPolicy
 ```
 
 ```code
-dcloud@ubuntu:~/lab/final_scripts$ python3 policy-list-activate-deactivate.py policy-list
+python3 policy-list-activate-deactivate.py policy-list
+```
+
+```code
 Retrieving the Centralized Policies available.
 ╒══════════════════════════════╤═══════════════╤══════════════════════════════════════╤═══════════════════╕
 │ Policy Name                  │ Policy Type   │ Policy ID                            │ Active/Inactive   │
