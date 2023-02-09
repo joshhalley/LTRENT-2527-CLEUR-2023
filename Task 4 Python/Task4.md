@@ -24,10 +24,11 @@ We will now explore the APIs using python.
 ## Step 1: Authenticate
 
 Below is the script for authentication, in which we have the following:
-•A class named Authenticaton
-•Under the class we have defined 2 functions
-oget_jsessionid
-oget_token
+
+* A class named Authenticaton
+* Under the class we have defined 2 functions
+* get_jsessionid
+* get_token
 
 ```code
 vim vmanage_auth.py 
@@ -111,15 +112,16 @@ if __name__ == '__main__':
 ###############################################################################################
 ```
 
-•The final section in the authentication is using the Authentication class
-•This is used to log in to SD-WAN vManage and get the jsessionid and token.
-•The get_jsessionid() is used to log in to SD-WAN vManage and get the jsessionid.
-•The get_token() is used to get the token
-•The variable jsessionid is used to set the cookie that is required for the API endpoint to be accessed.
-•Here the token is the value of the token that is stored in the session.
-•The token is stored in the session when the user logs in.
-•The base url is composed of the vmanage_host and vmanage_port variables.
-•The vmanage ip, port username and passwords are taken from the environment variables
+* The final section in the authentication is using the Authentication class
+* This is used to log in to SD-WAN vManage and get the jsessionid and token.
+* The get_jsessionid() is used to log in to SD-WAN vManage and get the jsessionid.
+* The get_token() is used to get the token
+* The variable jsessionid is used to set the cookie that is required for the API endpoint to be accessed.
+* Here the token is the value of the token that is stored in the session.
+* The token is stored in the session when the user logs in.
+* The base url is composed of the vmanage_host and vmanage_port variables.
+* The vmanage ip, port username and passwords are taken from the environment variables
+
 Add the environment variable, execute the above script, it will print the JSESSION ID and the XSRF token
 
 ```code
@@ -145,8 +147,9 @@ Now using the above authentication class, we can create scripts to run GET and P
 
 ### GET Controller List
 
-Below script uses the authentication class and then at the end run a GET for controllers and extracts just the [data] portion of the JSON and store it in a variable called items
-It now iterates over each device in the items with a for loop and extract data for the devicetype and deviceIP. After this display the data as specified in the print statement
+Below script uses the authentication class descibed above and then at the end run a GET for controllers and extracts just the [data] portion of the JSON and store it in a variable called items
+It now iterates over each device in the items with a for loop and extract data for the devicetype and deviceIP.
+After this display the data as specified in the print statement
 
 ```code
 vim get_sdwan_controller_1.py 
@@ -276,6 +279,8 @@ Modify the code as below if you want to see the full response in pretty format
 
 ### GET Edge List
 
+The same logic and script but instead of controllers this will fetch the Edges list.
+
 ```code
 vim get_sdwan_edges_1.py
 ```
@@ -390,8 +395,10 @@ Three CLI commands are grouped under the cli Group: device_list, template-list a
 
 To established session with the vManage server it uses the instance of the authentication class that you called Authentication.
 It will use the get_request method of this object to get a list of all the devices and templates in the fabric and store the JSON data that is returned by the API in the response variable.
-It extracts just the [data] portion of the JSON and store it in a variable called items. The items variable at this point contains all the devices in the fabric and many of additional data about each of them
-It now iterates over each item in the items with a for loop and extract data for the hostname, device-type, uuid, system-ip, site-id, version, and device-model of each device. After this uses tabulate to display the data
+It extracts just the [data] portion of the JSON and store it in a variable called items.
+The items variable at this point contains all the devices in the fabric and many of additional data about each of them
+It now iterates over each item in the items with a for loop and extract data for the hostname, device-type, uuid, system-ip, site-id, version, and device-model of each device.
+After this uses tabulate to display the data
 
 ```code
 vim get-device-template-variable-list.py 
@@ -868,7 +875,7 @@ response = requests.post(url=url, data=payload, headers=headers, verify=False)
 print(response)
 ```
 
-Exeute the script to change the hostname
+Execute the script to change the hostname
 
 ```code
 python  modify-device-variable.py
@@ -906,6 +913,9 @@ Attempting to get variable for a device template.
 ```
 
 ### Add vMange Usergroup
+
+The below scripts adds a usergroup to vMange with read write access to "Manage users" feature.
+The full payload can be taken from Sawagger
 
 ```code
 vim post_sdwan_add_group.py
@@ -1017,6 +1027,8 @@ python3 post_sdwan_add_group.py
 
 ### Add vManage User
 
+The below script will create a user named "pythonuser" and put it under the group "pythongrp" creared above
+
 ```code
 vim post_sdwan_add_usr.py
 ```
@@ -1127,11 +1139,12 @@ python3 post_sdwan_add_usr.py
 The below scripts again uses click to create the CLI component of the application.
 We have 3 options defined
 
-* Get  Policy List
+* Get Policy List
 * Activate Policy
 * Deactivate Policy
 
 The code again use the same authentication class to get the JSESSION ID and Token and then defined the above methods separately
+For activate and deactivate of the policy, we are tracking the Status of the tasks as well.
 
 ```code
 vim policy-list-activate-deactivate.py 
@@ -1441,6 +1454,8 @@ Policy UUID for MultiTopologyPolicy is 6ff80e3c-a8e8-4fbf-9b55-32568093440c
 Successfully activated vSmart Policy MultiTopologyPolicy
 ```
 
+Check the policy list again and confirm that the above policy is now active
+
 ```code
 python3 policy-list-activate-deactivate.py policy-list
 ```
@@ -1478,6 +1493,8 @@ Policy UUID for MultiTopologyPolicy is 6ff80e3c-a8e8-4fbf-9b55-32568093440c
 
 Successfully deactivated vSmart Policy MultiTopologyPolicy
 ```
+
+Check the policy list again and confirm that the above policy is deactivated
 
 ```code
 python3 policy-list-activate-deactivate.py policy-list
