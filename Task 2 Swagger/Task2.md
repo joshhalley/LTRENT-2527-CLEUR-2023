@@ -31,7 +31,7 @@ Expand GET /device
 
 ![postman](/images/sw2.png)
 
-Click Try it Out to Execute the API call; upon execution, scroll down and observe the results created.
+Click Try it Out to Execute the API call; upon execution, scroll down and observe the CURL request and results retunred.
 
 ![postman](/images/sw3.png)
 
@@ -41,11 +41,11 @@ Scroll down to Real Time Monitoring – Device Contol > expand and go to GET
  /device/control/summary
 ![postman](/images/sw4.png)
 
-Click Try it out, this time taking a device id from a device with an RFC1918 (private) IP Address, from the previous output and entering it into the dialog box, follow this by clicking the button.
+Click Try it out, this time taking a device id from the previous output and entering it into the dialog box, follow this by clicking the button. We are using 10.3.0.1 in this example
 
 ![postman](/images/sw5.png)
 
-Observe the results
+Again bbserve the CURL request and results
 
 ## Step 4: Create User Group
 
@@ -53,7 +53,7 @@ Scroll Up to Administration – User and Group, Expand and Go to POST /admin/use
 
 ![postman](/images/sw6.png)
 
-Click Try it out > In the request body modify the name to “ciscolive” changing the feature from read & write to false as needed as to steer your role based access control capabilities (RBAC) and click to execute.
+Click Try it out > In the request body modify the name to “ciscoliveams” changing the feature from read & write to false as needed as to steer your role based access control capabilities (RBAC) and click to execute.
 
 ![postman](/images/sw7.png)
 
