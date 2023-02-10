@@ -32,7 +32,7 @@ This section is going to explore the use of Ansible to achieve a number of actio
 To verify the installation state of Ansible, the execution of ansible –version is performed:
 
 ```code
-ansible --version
+ansible --version 
 ```
 
 ```code
