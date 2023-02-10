@@ -43,6 +43,7 @@ The forthcoming programmability tasks outlined in this lab shall use a mix of op
 
 ```Dcloud VPN Credentials will be shared by the instructors```
 
+
 ## Task 0: Setup the Ubuntu Environment
 
 Login to the Ubuntu Matchine, IP and Credentials above.
