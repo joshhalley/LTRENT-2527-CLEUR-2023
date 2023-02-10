@@ -62,7 +62,7 @@ The body of the returned information should be empty and the status should be 20
 
 This feature adds protection against Cross-Site Request Forgery (CSRF) that could occur when using Cisco SD-WAN REST APIs. The system provides this protection by requiring a CSRF token with API requests. This token is need to POST requrest.
 
-Execute the GET token request to generate the XSRF Token
+Execute the GET token request to generate the XSRF Token by clicking the SEND button in postman
 
 ![postman](/images/pm-6.png)
 
