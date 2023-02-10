@@ -39,7 +39,7 @@ The forthcoming programmability tasks outlined in this lab shall use a mix of op
 
 ## Device Details
 
-![postman](images/tb.png)
+![postman](images/tb-1.png)
 
 ```Dcloud VPN Credentials will be shared by the instructors```
 
